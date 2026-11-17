@@ -110,13 +110,38 @@ export function StudioEditor({
   const [hideControlsForGuest, setHideControlsForGuest] = useState(true);
   const [copiedGuestIdx, setCopiedGuestIdx] = useState<number | null>(null);
   const [originUrl, setOriginUrl] = useState(
-    "https://undangan-yulia-nabil.vercel.app"
+    "https://undangan-adat-padang-yulia-nabil.vercel.app"
   );
+  const [isUnlocked, setIsUnlocked] = useState(true);
+  const [pinInput, setPinInput] = useState("");
+  const [pinError, setPinError] = useState(false);
+  const [copiedPublicLink, setCopiedPublicLink] = useState(false);
 
   const importInputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
     setOriginUrl(window.location.origin);
+    const host = window.location.hostname;
+    const params = new URLSearchParams(window.location.search);
+    const pinParam = (params.get("pin") || "").trim().toLowerCase();
+    const savedUnlock =
+      window.sessionStorage.getItem("pusako_studio_unlocked") === "1";
+
+    if (
+      host === "localhost" ||
+      host === "127.0.0.1" ||
+      savedUnlock ||
+      pinParam === "yulianabil" ||
+      pinParam === "201226"
+    ) {
+      setIsUnlocked(true);
+      if (pinParam) {
+        window.sessionStorage.setItem("pusako_studio_unlocked", "1");
+      }
+    } else {
+      setIsUnlocked(false);
+    }
+
     const loadAll = async () => {
       let resolved = initialConfig;
       try {
@@ -454,10 +479,6 @@ export function StudioEditor({
     const params = new URLSearchParams();
     params.set("to", name);
     if (code) params.set("code", code);
-    params.set("theme", config.themeId);
-    if (hideControlsForGuest) {
-      params.set("guest", "1");
-    }
     return `${originUrl}/?${params.toString()}`;
   };
 
@@ -485,6 +506,70 @@ export function StudioEditor({
       g.code.toLowerCase().includes(guestSearch.toLowerCase())
   );
 
+  const handleUnlockStudio = (e: React.FormEvent) => {
+    e.preventDefault();
+    const cleaned = pinInput.trim().toLowerCase();
+    if (cleaned === "yulianabil" || cleaned === "201226") {
+      setIsUnlocked(true);
+      setPinError(false);
+      try {
+        window.sessionStorage.setItem("pusako_studio_unlocked", "1");
+      } catch {
+        // ignore
+      }
+    } else {
+      setPinError(true);
+    }
+  };
+
+  if (!isUnlocked) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-[#140A0C] px-4 text-[#F5EFE6]">
+        <div className="w-full max-w-md rounded-2xl border border-[#C8A25A]/50 bg-[#1F1215] p-7 text-center shadow-2xl">
+          <p className="font-display text-[10px] uppercase tracking-[0.26em] text-[#E8CD93]">
+            Akses Khusus Pengantin
+          </p>
+          <h1 className="mt-2 font-serif text-3xl font-bold text-white">
+            Studio &amp; Dashboard
+          </h1>
+          <p className="mt-1.5 text-xs text-white/65">
+            Halaman ini dikunci agar tamu undangan tidak dapat mengubah isi undangan secara sembarangan.
+          </p>
+
+          <form onSubmit={handleUnlockStudio} className="mt-5 space-y-3">
+            <input
+              type="password"
+              value={pinInput}
+              onChange={(e) => setPinInput(e.target.value)}
+              placeholder="Masukkan Kode Akses Pengantin..."
+              className="w-full rounded-xl border border-[#C8A25A]/50 bg-black/40 px-4 py-3 text-center text-sm text-white outline-none"
+            />
+            {pinError ? (
+              <p className="text-xs font-semibold text-red-400">
+                Kode akses tidak sesuai.
+              </p>
+            ) : null}
+            <button
+              type="submit"
+              className="w-full rounded-full bg-gradient-to-r from-[#E8CD93] to-[#C8A25A] py-3 text-xs font-bold uppercase tracking-[0.18em] text-[#1B1110] shadow-lg"
+            >
+              Buka Studio Pengantin
+            </button>
+          </form>
+
+          <div className="mt-5 border-t border-white/10 pt-4">
+            <Link
+              href="/"
+              className="text-xs text-[#E8CD93] hover:underline"
+            >
+              ← Kembali ke Halaman Undangan Tamu
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex min-h-screen flex-col bg-[#141012] text-[#F5EFE6]">
       {/* TOP STUDIO TOOLBAR */}
@@ -492,11 +577,33 @@ export function StudioEditor({
         <div className="flex items-center gap-3">
           <Link
             href="/"
+            target="_blank"
             className="inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-xs font-medium text-white/85 hover:bg-white/10"
           >
             <ArrowLeft className="h-3.5 w-3.5" />
-            Lihat Undangan
+            Lihat Tampilan Tamu
           </Link>
+          <button
+            type="button"
+            onClick={() => {
+              void navigator.clipboard.writeText(`${originUrl}/`);
+              setCopiedPublicLink(true);
+              setTimeout(() => setCopiedPublicLink(false), 2500);
+            }}
+            className="inline-flex items-center gap-1.5 rounded-full border border-[#C8A25A]/60 bg-[#C8A25A]/15 px-3 py-1.5 text-xs font-semibold text-[#E8CD93] hover:bg-[#C8A25A]/25"
+          >
+            {copiedPublicLink ? (
+              <>
+                <Check className="h-3.5 w-3.5 text-emerald-400" />
+                Link Tamu Tersalin!
+              </>
+            ) : (
+              <>
+                <Copy className="h-3.5 w-3.5" />
+                Salin Link Tamu
+              </>
+            )}
+          </button>
           <div>
             <p className="font-serif text-base font-semibold text-[#E8CD93]">
               Studio &amp; Dashboard Pengantin — Pusako Minang

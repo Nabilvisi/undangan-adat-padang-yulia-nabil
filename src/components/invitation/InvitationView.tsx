@@ -1,11 +1,9 @@
 "use client";
 
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import Link from "next/link";
 import { AnimatePresence } from "framer-motion";
 import {
   Calendar,
-  Edit3,
   Gift,
   Heart,
   Image as ImageIcon,
@@ -362,52 +360,19 @@ export function InvitationView({
               />
             </div>
 
-            {/* Top Studio & Theme Controls Bar (Desktop Showcase) */}
-            {!isEmbeddedPreview && !isGuestShareMode ? (
-              <div className="relative z-20 flex w-full items-center justify-between gap-4">
-                <div className="flex flex-wrap items-center gap-1.5 rounded-full bg-black/35 px-3 py-1.5 backdrop-blur-md border border-white/10">
-                  <span className="mr-1 text-[10px] font-display uppercase tracking-[0.16em] text-white/75">
-                    Versi Warna:
-                  </span>
-                  {THEME_LIST.map((t) => {
-                    const active = t.id === theme.id;
-                    return (
-                      <button
-                        key={t.id}
-                        type="button"
-                        onClick={() => handleSelectTheme(t.id)}
-                        title={`${t.name} — ${t.tagline}`}
-                        className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-medium transition ${
-                          active
-                            ? "bg-white/20 text-white ring-1 ring-[#E8CD93]"
-                            : "text-white/70 hover:text-white hover:bg-white/10"
-                        }`}
-                      >
-                        <span
-                          className="h-2.5 w-2.5 rounded-full border border-white/40"
-                          style={{ backgroundColor: t.swatches[0] }}
-                        />
-                        <span className="hidden xl:inline">{t.name}</span>
-                      </button>
-                    );
-                  })}
-                </div>
-
-                <Link
-                  href="/studio"
-                  className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold shadow-lg transition hover:scale-[1.03]"
-                  style={{
-                    background: `linear-gradient(135deg, ${theme.accentGoldLight} 0%, ${theme.accentGold} 100%)`,
-                    color: "#1B1110",
-                  }}
-                >
-                  <Edit3 className="h-3.5 w-3.5" />
-                  Edit Undangan (Studio)
-                </Link>
-              </div>
-            ) : (
-              <div />
-            )}
+            {/* Top Spacer on Desktop Showcase (No Edit button shown to guests) */}
+            <div className="relative z-20 flex w-full items-center justify-center">
+              <span
+                className="rounded-full border px-4 py-1 font-display text-[10px] uppercase tracking-[0.26em] backdrop-blur-sm"
+                style={{
+                  borderColor: `${theme.accentGold}44`,
+                  backgroundColor: "rgba(0,0,0,0.28)",
+                  color: theme.accentGoldLight,
+                }}
+              >
+                Undangan Pernikahan Adat Minangkabau
+              </span>
+            </div>
 
             {/* Center Architectural Crest & Couple Showcase */}
             <div className="relative z-10 flex max-w-lg flex-col items-center text-center">
@@ -467,12 +432,9 @@ export function InvitationView({
               ) : null}
             </div>
 
-            {/* Bottom Active Theme Metadata */}
+            {/* Bottom Metadata */}
             <div className="relative z-10 flex w-full items-center justify-between text-[11px] text-white/65">
-              <span>
-                Tema Aktif:{" "}
-                <strong className="text-[#E8CD93]">{theme.name}</strong>
-              </span>
+              <span>{coupleTitle}</span>
               <span>Adat Minangkabau • Sumatera Barat</span>
             </div>
           </aside>
@@ -495,13 +457,9 @@ export function InvitationView({
             />
           </div>
 
-          {/* Mobile / Quick Top Toolbar (Visible on mobile or embedded preview, hidden in guest-share mode) */}
-          {!isGuestShareMode ? (
-            <div
-              className={`relative z-30 mb-4 flex items-center justify-between gap-2 ${
-                !forceMobileLayout && !isEmbeddedPreview ? "lg:hidden" : ""
-              }`}
-            >
+          {/* Theme Switcher ONLY inside Studio Embedded Preview (Never shown on Guest Invitation) */}
+          {isEmbeddedPreview ? (
+            <div className="relative z-30 mb-4 flex items-center justify-between gap-2">
               <button
                 type="button"
                 onClick={() => setShowThemeDrawer((prev) => !prev)}
@@ -519,25 +477,10 @@ export function InvitationView({
                 <Palette className="h-3.5 w-3.5" />
                 4 Versi Warna
               </button>
-
-              {!isEmbeddedPreview ? (
-                <Link
-                  href="/studio"
-                  className="inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-[11px] font-semibold shadow-md transition"
-                  style={{
-                    background: `linear-gradient(135deg, ${theme.accentGoldLight}, ${theme.accentGold})`,
-                    color: "#1B1110",
-                  }}
-                >
-                  <Edit3 className="h-3.5 w-3.5" />
-                  Edit di Studio
-                </Link>
-              ) : null}
             </div>
           ) : null}
 
-          {/* Expandable Theme Version Picker on Mobile / Embedded Preview */}
-          {showThemeDrawer && !isGuestShareMode ? (
+          {showThemeDrawer && isEmbeddedPreview ? (
             <div
               className="relative z-30 mb-4 grid grid-cols-2 gap-2 rounded-2xl p-3 shadow-xl backdrop-blur-md"
               style={{

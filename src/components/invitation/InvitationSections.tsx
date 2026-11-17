@@ -951,7 +951,7 @@ export function InvitationSections({
             </p>
           </div>
 
-          {/* Direct In-Website Transfer via QRIS & Virtual Account */}
+          {/* QR Code & Real Bank Account Transfer + Instant Confirmation */}
           <DirectTransferPanel
             guestName={guestName}
             guestCode={resolvedGuestCode}
@@ -962,89 +962,6 @@ export function InvitationSections({
           />
 
           <div className="mt-4 space-y-3">
-            <p
-              className="text-center font-display text-[10px] font-semibold uppercase tracking-[0.18em]"
-              style={{ color: theme.accentGoldDark }}
-            >
-              Atau Transfer Manual ke Rekening Bank
-            </p>
-            {config.gifts.bankAccounts.map((acc) => {
-              const isCopied = copiedKey === acc.id;
-              return (
-                <div
-                  key={acc.id}
-                  className="flex items-center justify-between gap-3 rounded-xl p-4"
-                  style={{
-                    backgroundColor: theme.cardBgAlt,
-                    border: `1px solid ${theme.accentGold}66`,
-                  }}
-                >
-                  <div className="min-w-0">
-                    <p
-                      className="font-display text-[10px] font-bold uppercase tracking-[0.18em]"
-                      style={{ color: theme.accentGoldDark }}
-                    >
-                      {acc.bankName}
-                    </p>
-                    <p className="tabular-nums-editorial mt-1 text-base font-bold tracking-wide">
-                      {acc.accountNumber}
-                    </p>
-                    <p
-                      className="mt-0.5 text-xs"
-                      style={{ color: theme.textOnCardMuted }}
-                    >
-                      a.n. {acc.accountHolder}
-                    </p>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => copyText(acc.accountNumber, acc.id)}
-                    className="inline-flex shrink-0 items-center gap-1.5 rounded-full px-3.5 py-2 text-[11px] font-semibold transition"
-                    style={{
-                      backgroundColor: isCopied
-                        ? "#1F6E43"
-                        : theme.accentPrimary,
-                      color: "#FFFFFF",
-                    }}
-                  >
-                    {isCopied ? (
-                      <>
-                        <Check className="h-3.5 w-3.5" />
-                        Tersalin
-                      </>
-                    ) : (
-                      <>
-                        <Copy className="h-3.5 w-3.5" />
-                        Salin
-                      </>
-                    )}
-                  </button>
-                </div>
-              );
-            })}
-
-            {config.gifts.qrisImage ? (
-              <div
-                className="flex flex-col items-center rounded-xl p-4 text-center"
-                style={{
-                  backgroundColor: theme.cardBgAlt,
-                  border: `1px solid ${theme.accentGold}55`,
-                }}
-              >
-                <p
-                  className="font-display text-[10px] font-semibold uppercase tracking-[0.2em]"
-                  style={{ color: theme.accentGoldDark }}
-                >
-                  QRIS Digital
-                </p>
-                <img
-                  src={config.gifts.qrisImage}
-                  alt="QRIS Amplop Digital"
-                  className="mt-3 max-h-56 rounded-lg object-contain"
-                />
-              </div>
-            ) : null}
-
             {config.gifts.physicalGift.enabled ? (
               <div
                 className="rounded-xl p-4 text-center"

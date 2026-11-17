@@ -21,8 +21,8 @@
     "childOrder": "Putri dari",
     "fatherName": "Bapak Alfian (Edit Nama Ayah)",
     "motherName": "Ibu ... (Edit Nama Ibu)",
-    "suku": "Suku ... — Padang",
-    "instagram": "@yuliaalfianeri",
+    "suku": "Adat Minangkabau — Sumatera Barat",
+    "instagram": "@yulialfnr_",
     "photo": "/images/minang-bride.svg"
   },
   "groom": {
@@ -34,7 +34,7 @@
     "childOrder": "Putra dari",
     "fatherName": "Bapak ... (Edit Nama Ayah)",
     "motherName": "Ibu ... (Edit Nama Ibu)",
-    "suku": "Suku ... — Sumatera Barat",
+    "suku": "Adat Minangkabau — Sumatera Barat",
     "instagram": "@nabilvisisamawi",
     "photo": "/images/minang-groom.svg"
   },
@@ -55,13 +55,13 @@
       "date": "2026-12-19",
       "startTime": "19:30 WIB",
       "endTime": "22:00 WIB",
-      "venueName": "Kediaman Mempelai Wanita",
-      "address": "Jl. Khatib Sulaiman, Kec. Padang Utara (Dapat diedit di Studio)",
-      "city": "Padang, Sumatera Barat",
-      "mapsUrl": "https://maps.google.com/?q=Masjid+Raya+Sumatera+Barat+Padang",
-      "lat": -0.9242,
-      "lng": 100.3624,
-      "landmarkNote": "Kawasan Khatib Sulaiman — Akses parkir luas di halaman utama"
+      "venueName": "Kediaman Mempelai",
+      "address": "Jl. Barokah I No.8, RT.004/RW.024, Perwira, Kec. Bekasi Utara",
+      "city": "Kota Bekasi, Jawa Barat 17124",
+      "mapsUrl": "https://maps.app.goo.gl/gZ5ME2iE9hm2p24s8",
+      "lat": -6.1999132,
+      "lng": 107.0133192,
+      "landmarkNote": "Jl. Barokah I No.8, Perwira, Kec. Bekasi Utara"
     },
     {
       "id": "akad-nikah",
@@ -71,13 +71,13 @@
       "date": "2026-12-20",
       "startTime": "08:30 WIB",
       "endTime": "10:00 WIB",
-      "venueName": "Masjid Raya Syekh Ahmad Khatib Al-Minangkabawi (Dapat Diedit)",
-      "address": "Jl. Khatib Sulaiman, Alai Parak Kopi, Kec. Padang Utara",
-      "city": "Kota Padang, Sumatera Barat",
-      "mapsUrl": "https://maps.google.com/?q=Masjid+Raya+Sumatera+Barat+Padang",
-      "lat": -0.9242,
-      "lng": 100.3624,
-      "landmarkNote": "Arsitektur Atap Bagonjong Ikonik Kota Padang"
+      "venueName": "Kediaman Mempelai",
+      "address": "Jl. Barokah I No.8, RT.004/RW.024, Perwira, Kec. Bekasi Utara",
+      "city": "Kota Bekasi, Jawa Barat 17124",
+      "mapsUrl": "https://maps.app.goo.gl/gZ5ME2iE9hm2p24s8",
+      "lat": -6.1999132,
+      "lng": 107.0133192,
+      "landmarkNote": "Jl. Barokah I No.8, Perwira, Kec. Bekasi Utara"
     },
     {
       "id": "baralek-gadang",
@@ -87,13 +87,13 @@
       "date": "2026-12-20",
       "startTime": "11:00 WIB",
       "endTime": "16:00 WIB",
-      "venueName": "Auditorium Istana Gubernur / Balai Adat (Dapat Diedit)",
-      "address": "Jl. Jenderal Sudirman No. 51, Padang Pasir, Kec. Padang Barat",
-      "city": "Kota Padang, Sumatera Barat",
-      "mapsUrl": "https://maps.google.com/?q=Auditorium+Gubernur+Sumatera+Barat+Padang",
-      "lat": -0.9371,
-      "lng": 100.3604,
-      "landmarkNote": "Pusat Kota Padang — 5 Menit dari Masjid Raya"
+      "venueName": "Kediaman Mempelai",
+      "address": "Jl. Barokah I No.8, RT.004/RW.024, Perwira, Kec. Bekasi Utara",
+      "city": "Kota Bekasi, Jawa Barat 17124",
+      "mapsUrl": "https://maps.app.goo.gl/gZ5ME2iE9hm2p24s8",
+      "lat": -6.1999132,
+      "lng": 107.0133192,
+      "landmarkNote": "Jl. Barokah I No.8, Perwira, Kec. Bekasi Utara"
     }
   ],
   "loveStory": {
@@ -149,10 +149,10 @@
   },
   "liveStreaming": {
     "enabled": true,
-    "platform": "Instagram Live / YouTube",
-    "scheduleNote": "Siaran langsung saat prosesi Akad Nikah berlangsung",
-    "url": "https://instagram.com",
-    "buttonLabel": "Tonton Siaran Langsung"
+    "platform": "Instagram Live (@yulialfnr_)",
+    "scheduleNote": "Siaran langsung prosesi pernikahan melalui akun Instagram @yulialfnr_",
+    "url": "https://www.instagram.com/yulialfnr_/",
+    "buttonLabel": "Tonton Live di @yulialfnr_"
   },
   "dressCode": {
     "enabled": true,
@@ -168,11 +168,11 @@
   },
   "gifts": {
     "enabled": true,
-    "subtitle": "Doa restu Bapak/Ibu adalah karunia yang sangat berarti bagi kami. Apabila berkenan menyampaikan tanda kasih, dapat langsung melalui fitur Transfer QRIS / Virtual Account di bawah ini:",
+    "subtitle": "Doa restu Bapak/Ibu adalah karunia yang sangat berarti bagi kami. Apabila berkenan menyampaikan tanda kasih, dapat melalui Scan QR Code (QRIS) atau transfer rekening di bawah ini:",
     "bankAccounts": [
       {
         "id": "bank-1",
-        "bankName": "Bank Nagari / BCA",
+        "bankName": "BCA / Bank Nagari",
         "accountNumber": "2100-0210-8899",
         "accountHolder": "Yulia Alfianeri"
       },
@@ -188,7 +188,7 @@
       "enabled": true,
       "recipient": "Yulia Alfianeri / Nabil Visi Samawi",
       "phone": "0812-XXXX-XXXX",
-      "address": "Alamat pengiriman kado fisik dapat diedit melalui Studio Editor"
+      "address": "Jl. Barokah I No.8, RT.004/RW.024, Perwira, Kec. Bekasi Utara, Kota Bekasi, Jawa Barat 17124"
     }
   },
   "music": {
