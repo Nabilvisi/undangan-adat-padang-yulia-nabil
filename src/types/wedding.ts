@@ -166,6 +166,8 @@ export interface GuestRecord {
   name: string;
   category: string; // e.g. "Keluarga", "VIP", "Sahabat", "Kolega"
   phone?: string;
+  waSent?: boolean;
+  waSentAt?: string;
   rsvpStatus: "belum-konfirmasi" | "hadir" | "berhalangan" | "ragu";
   pax: number;
   checkedIn: boolean;

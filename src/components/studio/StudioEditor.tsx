@@ -7,6 +7,7 @@ import {
   Calendar,
   Camera,
   Check,
+  CheckCheck,
   CheckCircle2,
   Copy,
   CreditCard,
@@ -14,11 +15,14 @@ import {
   Download,
   ExternalLink,
   Eye,
+  FileSpreadsheet,
   Gift,
   Heart,
+  MessageSquareText,
   Monitor,
   Music,
   Palette,
+  Phone,
   Play,
   Plus,
   QrCode,
@@ -27,6 +31,7 @@ import {
   Search,
   Send,
   Shirt,
+  SkipForward,
   Smartphone,
   Square,
   Trash2,
@@ -41,6 +46,14 @@ import {
   mergeWeddingConfig,
 } from "@/lib/config-store";
 import { MUSIC_TRACK_OPTIONS, MinangAudioPlayer } from "@/lib/audio";
+import {
+  DEFAULT_WA_TEMPLATE,
+  ParsedGuestEntry,
+  buildWhatsAppDirectHref,
+  parseDelimitedGuestInput,
+  parseSpreadsheetRows,
+  renderWhatsAppMessage,
+} from "@/lib/whatsapp-guests";
 import {
   FrameStyle,
   GuestRecord,
@@ -103,12 +116,18 @@ export function StudioEditor({
   // Transfer Database state
   const [transfers, setTransfers] = useState<TransferRecord[]>([]);
 
-  // Guest link generator state
-  const [guestBulkText, setGuestBulkText] = useState(
-    "Keluarga Bapak Ahmad\nDatuak Rajo Alam & Bundo Kanduang\nSahabat Kampus & Kantor"
+  // Guest link generator, Excel import & WhatsApp Blast Queue state
+  const [guestBulkText, setGuestBulkText] = useState("");
+  const [waTemplate, setWaTemplate] = useState(DEFAULT_WA_TEMPLATE);
+  const [includeQrCodeInWa, setIncludeQrCodeInWa] = useState(true);
+  const [waFilter, setWaFilter] = useState<"all" | "unsent" | "sent">("all");
+  const [waSearch, setWaSearch] = useState("");
+  const [copiedAllLinks, setCopiedAllLinks] = useState(false);
+  const [copiedWaMsgId, setCopiedWaMsgId] = useState<string | null>(null);
+  const [excelImporting, setExcelImporting] = useState(false);
+  const [excelImportSummary, setExcelImportSummary] = useState<string | null>(
+    null
   );
-  const [hideControlsForGuest, setHideControlsForGuest] = useState(true);
-  const [copiedGuestIdx, setCopiedGuestIdx] = useState<number | null>(null);
   const [originUrl, setOriginUrl] = useState(
     "https://undangan-adat-padang-yulia-nabil.vercel.app"
   );
@@ -118,9 +137,16 @@ export function StudioEditor({
   const [copiedPublicLink, setCopiedPublicLink] = useState(false);
 
   const importInputRef = useRef<HTMLInputElement | null>(null);
+  const excelUploadInputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
     setOriginUrl(window.location.origin);
+    try {
+      const savedTpl = window.localStorage.getItem("pusako_wa_template_v1");
+      if (savedTpl) setWaTemplate(savedTpl);
+    } catch {
+      // ignore
+    }
     const host = window.location.hostname;
     const params = new URLSearchParams(window.location.search);
     const pinParam = (params.get("pin") || "").trim().toLowerCase();
@@ -388,7 +414,9 @@ export function StudioEditor({
     const headers = [
       "Kode QR",
       "Nama Tamu",
+      "Nomor WhatsApp",
       "Kategori",
+      "Status Kirim WA",
       "Status RSVP",
       "Jumlah Pax",
       "Sudah Check-In",
@@ -398,7 +426,9 @@ export function StudioEditor({
     const rows = guests.map((g) => [
       g.code,
       `"${g.name.replace(/"/g, '""')}"`,
+      g.phone || "-",
       `"${g.category}"`,
+      g.waSent ? "TERKIRIM" : "BELUM",
       g.rsvpStatus,
       g.pax,
       g.checkedIn ? "SUDAH" : "BELUM",
@@ -413,6 +443,145 @@ export function StudioEditor({
     a.download = "database-tamu-undangan.csv";
     a.click();
     URL.revokeObjectURL(url);
+  };
+
+  // Excel & WhatsApp Bulk Import / Queue Helpers
+  const syncEntriesToGuestDb = async (
+    entries: ParsedGuestEntry[],
+    sourceLabel: string
+  ) => {
+    if (entries.length === 0) return;
+    setExcelImporting(true);
+    try {
+      const res = await fetch("/api/guests", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "import-bulk",
+          entries,
+          category: newGuestCategory,
+          pax: 2,
+        }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.guests) setGuests(data.guests);
+        const msg = `${sourceLabel}: ${data.addedCount ?? entries.length} tamu ditambahkan${
+          data.updatedCount ? `, ${data.updatedCount} diperbarui` : ""
+        } beserta nomor WA & kode QR!`;
+        setExcelImportSummary(msg);
+        setSaveMessage(msg);
+        setTimeout(() => setSaveMessage(null), 4000);
+      }
+    } finally {
+      setExcelImporting(false);
+    }
+  };
+
+  const handleDownloadExcelTemplate = async () => {
+    const XLSX = await import("xlsx");
+    const sampleRows = [
+      {
+        "Nama Tamu": "Keluarga Bapak H. Ahmad & Ibu",
+        "Nomor WhatsApp": "081234567890",
+        Kategori: "Keluarga / VIP",
+        Pax: 2,
+      },
+      {
+        "Nama Tamu": "Datuak Rajo Alam & Istri",
+        "Nomor WhatsApp": "+62 813-9876-5432",
+        Kategori: "Ninik Mamak",
+        Pax: 2,
+      },
+      {
+        "Nama Tamu": "Rizki Pratama & Partner",
+        "Nomor WhatsApp": "6285211223344",
+        Kategori: "Sahabat",
+        Pax: 2,
+      },
+    ];
+    const ws = XLSX.utils.json_to_sheet(sampleRows);
+    ws["!cols"] = [{ wch: 32 }, { wch: 20 }, { wch: 18 }, { wch: 8 }];
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Daftar Tamu");
+    XLSX.writeFile(wb, "template-daftar-tamu-undangan.xlsx");
+  };
+
+  const handleImportExcelFile = async (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setExcelImporting(true);
+    try {
+      const XLSX = await import("xlsx");
+      const buffer = await file.arrayBuffer();
+      const wb = XLSX.read(buffer, { type: "array" });
+      const firstSheet = wb.SheetNames[0];
+      if (!firstSheet) return;
+      const rows = XLSX.utils.sheet_to_json<Record<string, unknown>>(
+        wb.Sheets[firstSheet],
+        { defval: "" }
+      );
+      const parsed = parseSpreadsheetRows(rows, newGuestCategory);
+      if (parsed.length === 0) {
+        setExcelImportSummary(
+          "Tidak ditemukan kolom Nama Tamu yang valid di file Excel/CSV."
+        );
+        return;
+      }
+      await syncEntriesToGuestDb(parsed, `Import ${file.name}`);
+    } catch {
+      setExcelImportSummary("Gagal membaca file Excel/CSV. Pastikan format benar.");
+    } finally {
+      setExcelImporting(false);
+      e.target.value = "";
+    }
+  };
+
+  const handleImportPastedGuests = async () => {
+    const entries = parseDelimitedGuestInput(guestBulkText, newGuestCategory);
+    if (entries.length === 0) return;
+    await syncEntriesToGuestDb(entries, "Paste Excel / Daftar Cepat");
+    setGuestBulkText("");
+  };
+
+  const handleToggleGuestWaSent = async (guest: GuestRecord, nextSent: boolean) => {
+    setGuests((prev) =>
+      prev.map((g) =>
+        g.id === guest.id
+          ? { ...g, waSent: nextSent, waSentAt: nextSent ? new Date().toISOString() : undefined }
+          : g
+      )
+    );
+    await fetch("/api/guests", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        action: "mark-wa-sent",
+        id: guest.id,
+        code: guest.code,
+        sent: nextSent,
+      }),
+    });
+  };
+
+  const handleDeleteGuest = async (guest: GuestRecord) => {
+    setGuests((prev) => prev.filter((g) => g.id !== guest.id));
+    await fetch("/api/guests", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "delete", id: guest.id }),
+    });
+  };
+
+  const updateWaTemplate = (next: string) => {
+    setWaTemplate(next);
+    try {
+      window.localStorage.setItem("pusako_wa_template_v1", next);
+    } catch {
+      // ignore
+    }
   };
 
   // Transfer Database actions
@@ -474,10 +643,15 @@ export function StudioEditor({
   const activeTheme =
     MINANG_THEMES[config.themeId] || MINANG_THEMES["sirah-gadang"];
 
-  const guestLines = guestBulkText
-    .split("\n")
-    .map((s) => s.trim())
-    .filter(Boolean);
+  const coupleLabel =
+    config.nameOrder === "groom-first"
+      ? `${config.groom.nickname} & ${config.bride.nickname}`
+      : `${config.bride.nickname} & ${config.groom.nickname}`;
+
+  const pastedPreviewEntries = parseDelimitedGuestInput(
+    guestBulkText,
+    newGuestCategory
+  );
 
   const buildGuestUrl = (name: string, code?: string) => {
     const params = new URLSearchParams();
@@ -486,14 +660,57 @@ export function StudioEditor({
     return `${originUrl}/?${params.toString()}`;
   };
 
-  const buildWhatsAppHref = (name: string, code?: string) => {
-    const url = buildGuestUrl(name, code);
-    const coupleLabel =
-      config.nameOrder === "groom-first"
-        ? `${config.groom.nickname} & ${config.bride.nickname}`
-        : `${config.bride.nickname} & ${config.groom.nickname}`;
-    const text = `Assalamu'alaikum Warahmatullahi Wabarakatuh.\n\nKepada Yth. *${name}*,\n\nTanpa mengurangi rasa hormat, izinkan kami mengundang Bapak/Ibu/Saudara/i untuk menghadiri acara pernikahan kami:\n*${coupleLabel}*\n\nInformasi lengkap acara, Peta Visual 3D, dan Kartu QR Check-In personal Bapak/Ibu dapat dibuka melalui tautan undangan berikut:\n${url}\n\nMerupakan suatu kehormatan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu.\n\nWassalamu'alaikum Warahmatullahi Wabarakatuh.`;
-    return `https://wa.me/?text=${encodeURIComponent(text)}`;
+  const buildGuestMessage = (name: string, code?: string) => {
+    const useCode = includeQrCodeInWa ? code : undefined;
+    const url = buildGuestUrl(name, useCode);
+    return renderWhatsAppMessage(waTemplate, {
+      name,
+      link: url,
+      coupleLabel,
+      dateDisplay: config.cover.dateDisplay,
+      guestCode: useCode,
+    });
+  };
+
+  const buildWhatsAppHref = (name: string, code?: string, phone?: string) => {
+    const text = buildGuestMessage(name, code);
+    return buildWhatsAppDirectHref(phone, text);
+  };
+
+  const handleSendGuestWa = (guest: GuestRecord) => {
+    const href = buildWhatsAppHref(guest.name, guest.code, guest.phone);
+    window.open(href, "_blank", "noopener,noreferrer");
+    void handleToggleGuestWaSent(guest, true);
+  };
+
+  const waSentCount = guests.filter((g) => g.waSent).length;
+  const waUnsentCount = guests.length - waSentCount;
+  const nextUnsentGuest = guests.find((g) => !g.waSent) || null;
+
+  const waQueueGuests = guests.filter((g) => {
+    if (waFilter === "unsent" && g.waSent) return false;
+    if (waFilter === "sent" && !g.waSent) return false;
+    if (!waSearch.trim()) return true;
+    const q = waSearch.toLowerCase();
+    return (
+      g.name.toLowerCase().includes(q) ||
+      (g.phone || "").toLowerCase().includes(q) ||
+      g.code.toLowerCase().includes(q) ||
+      g.category.toLowerCase().includes(q)
+    );
+  });
+
+  const handleCopyAllGuestLinks = () => {
+    const lines = waQueueGuests.map(
+      (g, i) =>
+        `${i + 1}. ${g.name}${g.phone ? ` (+${g.phone})` : ""} — ${buildGuestUrl(
+          g.name,
+          includeQrCodeInWa ? g.code : undefined
+        )}`
+    );
+    void navigator.clipboard.writeText(lines.join("\n"));
+    setCopiedAllLinks(true);
+    setTimeout(() => setCopiedAllLinks(false), 2500);
   };
 
   // Computed stats
@@ -507,6 +724,7 @@ export function StudioEditor({
     (g) =>
       !guestSearch.trim() ||
       g.name.toLowerCase().includes(guestSearch.toLowerCase()) ||
+      (g.phone || "").toLowerCase().includes(guestSearch.toLowerCase()) ||
       g.code.toLowerCase().includes(guestSearch.toLowerCase())
   );
 
@@ -1868,14 +2086,24 @@ export function StudioEditor({
                       Pantau siapa saja yang hadir, status RSVP, &amp; verifikasi QR Code
                     </p>
                   </div>
-                  <button
-                    type="button"
-                    onClick={handleExportGuestsCsv}
-                    className="inline-flex items-center gap-1.5 rounded-full border border-[#C8A25A] bg-[#C8A25A]/15 px-3 py-1.5 text-[11px] font-bold text-[#E8CD93]"
-                  >
-                    <Download className="h-3.5 w-3.5" />
-                    CSV
-                  </button>
+                  <div className="flex shrink-0 items-center gap-1.5">
+                    <button
+                      type="button"
+                      onClick={() => setActiveTab("tamu")}
+                      className="inline-flex items-center gap-1 rounded-full border border-emerald-500/45 bg-emerald-950/50 px-2.5 py-1.5 text-[11px] font-bold text-emerald-300 hover:bg-emerald-900/60"
+                    >
+                      <FileSpreadsheet className="h-3.5 w-3.5" />
+                      Import Excel
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleExportGuestsCsv}
+                      className="inline-flex items-center gap-1.5 rounded-full border border-[#C8A25A] bg-[#C8A25A]/15 px-3 py-1.5 text-[11px] font-bold text-[#E8CD93]"
+                    >
+                      <Download className="h-3.5 w-3.5" />
+                      CSV
+                    </button>
+                  </div>
                 </div>
 
                 {/* Summary Stat Cards */}
@@ -1983,13 +2211,24 @@ export function StudioEditor({
                       >
                         <div className="flex items-start justify-between gap-2">
                           <div>
-                            <div className="flex items-center gap-2">
+                            <div className="flex flex-wrap items-center gap-1.5">
                               <span className="font-bold text-white">
                                 {g.name}
                               </span>
                               <span className="rounded bg-[#C8A25A]/20 px-2 py-0.5 font-mono text-[10px] font-bold text-[#E8CD93]">
                                 {g.code}
                               </span>
+                              {g.phone ? (
+                                <span className="inline-flex items-center gap-0.5 rounded bg-emerald-500/15 px-1.5 py-0.5 font-mono text-[9px] text-emerald-300">
+                                  <Phone className="h-2.5 w-2.5" />+{g.phone}
+                                </span>
+                              ) : null}
+                              {g.waSent ? (
+                                <span className="inline-flex items-center gap-0.5 rounded bg-sky-500/15 px-1.5 py-0.5 text-[9px] font-semibold text-sky-300">
+                                  <CheckCheck className="h-2.5 w-2.5" />
+                                  Terkirim WA
+                                </span>
+                              ) : null}
                             </div>
                             <p className="mt-0.5 text-[10px] text-white/60">
                               {g.category} • RSVP:{" "}
@@ -2044,14 +2283,13 @@ export function StudioEditor({
                               )}
                               Link QR
                             </button>
-                            <a
-                              href={buildWhatsAppHref(g.name, g.code)}
-                              target="_blank"
-                              rel="noreferrer"
+                            <button
+                              type="button"
+                              onClick={() => handleSendGuestWa(g)}
                               className="inline-flex items-center gap-1 rounded-full bg-emerald-600 px-2.5 py-1 text-[10px] font-semibold text-white hover:bg-emerald-500"
                             >
                               Kirim WA
-                            </a>
+                            </button>
                           </div>
                         </div>
                       </div>
@@ -2570,80 +2808,374 @@ export function StudioEditor({
               </div>
             ) : null}
 
-            {/* TAB 10: GENERATOR LINK TAMU CEPAT */}
+            {/* TAB 10: IMPORT EXCEL & GENERATOR ANTREAN SEBAR WA MASSAL */}
             {activeTab === "tamu" ? (
-              <div className="space-y-5">
-                <h2 className="font-serif text-xl font-semibold text-[#E8CD93]">
-                  Generator Cepat Link Tamu WhatsApp
-                </h2>
+              <div className="space-y-4">
+                <div className="flex items-center justify-between gap-2">
+                  <div>
+                    <h2 className="font-serif text-xl font-semibold text-[#E8CD93]">
+                      Import Excel &amp; Sebar WA Cepat
+                    </h2>
+                    <p className="text-[11px] text-white/60">
+                      Unggah Excel (.xlsx/.csv) atau paste kolom Excel -&gt; antrean kirim 1-klik langsung ke chat WA tamu.
+                    </p>
+                  </div>
+                </div>
 
-                <div className="space-y-3 rounded-xl border border-white/10 bg-white/5 p-4">
-                  <label className="block text-xs font-semibold text-white/80">
-                    Daftar Nama Tamu (1 nama per baris)
-                  </label>
+                {/* LANGKAH 1: IMPORT EXCEL / CSV / PASTE EXCEL */}
+                <div className="space-y-3 rounded-xl border border-[#C8A25A]/35 bg-[#C8A25A]/10 p-3.5">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="flex items-center gap-1.5 text-xs font-bold text-[#E8CD93]">
+                      <FileSpreadsheet className="h-4 w-4" />
+                      1. Import Daftar Tamu &amp; Nomor WA
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => void handleDownloadExcelTemplate()}
+                      className="inline-flex items-center gap-1 rounded-full border border-white/20 bg-white/10 px-2.5 py-1 text-[10px] font-semibold text-white hover:bg-white/20"
+                    >
+                      <Download className="h-3 w-3" />
+                      Template Excel
+                    </button>
+                  </div>
+
+                  <div className="flex gap-2">
+                    <input
+                      ref={excelUploadInputRef}
+                      type="file"
+                      accept=".xlsx,.xls,.csv,.ods"
+                      onChange={handleImportExcelFile}
+                      className="hidden"
+                    />
+                    <button
+                      type="button"
+                      disabled={excelImporting}
+                      onClick={() => excelUploadInputRef.current?.click()}
+                      className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-[#C8A25A] px-3 py-2 text-xs font-bold text-[#1B1110] shadow-md transition hover:brightness-105 disabled:opacity-60"
+                    >
+                      <Upload className="h-3.5 w-3.5" />
+                      {excelImporting
+                        ? "Mengimpor Excel..."
+                        : "Upload File Excel (.xlsx / .csv)"}
+                    </button>
+                  </div>
+
+                  {excelImportSummary ? (
+                    <p className="rounded-lg border border-emerald-500/35 bg-emerald-950/50 px-3 py-2 text-[11px] font-medium text-emerald-300">
+                      {excelImportSummary}
+                    </p>
+                  ) : null}
+
+                  <div className="border-t border-white/10 pt-2.5">
+                    <label className="mb-1 block text-[11px] font-semibold text-white/80">
+                      Atau Paste Langsung dari Excel / Ketik Cepat (Nama [Tab/Koma] No. WA [Tab/Koma] Kategori)
+                    </label>
+                    <textarea
+                      rows={3}
+                      value={guestBulkText}
+                      onChange={(e) => setGuestBulkText(e.target.value)}
+                      placeholder={
+                        "Contoh paste 2-3 kolom Excel atau ketik cepat:\nBapak H. Ahmad\t081234567890\tKeluarga\nDatuak Rajo Alam, +6281398765432, Ninik Mamak\nSahabat Kampus"
+                      }
+                      className="w-full rounded-lg border border-white/15 bg-black/35 px-3 py-2 text-xs text-white placeholder:text-white/35"
+                    />
+                    <div className="mt-2 flex items-center gap-2">
+                      <input
+                        type="text"
+                        value={newGuestCategory}
+                        onChange={(e) => setNewGuestCategory(e.target.value)}
+                        placeholder="Kategori default"
+                        className="w-36 rounded-lg border border-white/15 bg-black/35 px-2.5 py-1.5 text-xs text-white"
+                      />
+                      <button
+                        type="button"
+                        disabled={
+                          excelImporting || pastedPreviewEntries.length === 0
+                        }
+                        onClick={() => void handleImportPastedGuests()}
+                        className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-bold text-white transition hover:bg-emerald-500 disabled:opacity-50"
+                      >
+                        <Plus className="h-3.5 w-3.5" />
+                        Masukkan ke Daftar Kirim ({pastedPreviewEntries.length})
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* LANGKAH 2: TEMPLATE PESAN WHATSAPP */}
+                <div className="space-y-2 rounded-xl border border-white/10 bg-white/5 p-3.5">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="flex items-center gap-1.5 text-xs font-bold text-[#E8CD93]">
+                      <MessageSquareText className="h-4 w-4" />
+                      2. Template Pesan Pengantar WhatsApp
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => updateWaTemplate(DEFAULT_WA_TEMPLATE)}
+                      className="inline-flex items-center gap-1 text-[10px] text-white/65 hover:text-white"
+                    >
+                      <RotateCcw className="h-3 w-3" />
+                      Reset
+                    </button>
+                  </div>
+
                   <textarea
                     rows={4}
-                    value={guestBulkText}
-                    onChange={(e) => setGuestBulkText(e.target.value)}
-                    className="w-full rounded-lg border border-white/15 bg-black/30 px-3 py-2 text-xs text-white"
+                    value={waTemplate}
+                    onChange={(e) => updateWaTemplate(e.target.value)}
+                    className="w-full rounded-lg border border-white/15 bg-black/35 px-3 py-2 text-[11px] leading-relaxed text-white"
                   />
-                  <label className="flex items-center gap-2 text-[11px] text-white/75">
-                    <input
-                      type="checkbox"
-                      checked={hideControlsForGuest}
-                      onChange={(e) =>
-                        setHideControlsForGuest(e.target.checked)
-                      }
-                      className="accent-[#C8A25A]"
-                    />
-                    Sembunyikan tombol Edit &amp; Switcher Tema di link tamu
-                  </label>
 
-                  <div className="space-y-2 pt-2">
-                    {guestLines.map((name, idx) => (
-                      <div
-                        key={`${name}-${idx}`}
-                        className="flex items-center justify-between gap-2 rounded-lg border border-white/10 bg-black/25 px-3 py-2"
-                      >
-                        <div className="min-w-0">
-                          <p className="truncate text-xs font-semibold text-white">
-                            {name}
-                          </p>
-                          <p className="truncate text-[10px] text-white/50">
-                            {buildGuestUrl(name)}
-                          </p>
-                        </div>
-                        <div className="flex shrink-0 items-center gap-1.5">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <div className="flex flex-wrap gap-1">
+                      {["{nama}", "{link}", "{pasangan}", "{tanggal}", "{kode_qr}"].map(
+                        (token) => (
                           <button
+                            key={token}
                             type="button"
-                            onClick={() => {
-                              void navigator.clipboard.writeText(
-                                buildGuestUrl(name)
-                              );
-                              setCopiedGuestIdx(idx);
-                              setTimeout(() => setCopiedGuestIdx(null), 2000);
-                            }}
-                            className="inline-flex items-center gap-1 rounded-full bg-white/10 px-2.5 py-1 text-[10px] font-semibold text-white hover:bg-white/20"
+                            onClick={() =>
+                              updateWaTemplate(`${waTemplate} ${token}`)
+                            }
+                            className="rounded border border-white/15 bg-white/10 px-1.5 py-0.5 font-mono text-[10px] text-[#E8CD93] hover:bg-white/20"
                           >
-                            {copiedGuestIdx === idx ? (
-                              <Check className="h-3 w-3 text-emerald-400" />
-                            ) : (
-                              <Copy className="h-3 w-3" />
-                            )}
-                            Salin
+                            {token}
                           </button>
-                          <a
-                            href={buildWhatsAppHref(name)}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="inline-flex items-center gap-1 rounded-full bg-emerald-600 px-2.5 py-1 text-[10px] font-semibold text-white hover:bg-emerald-500"
-                          >
-                            WA
-                          </a>
-                        </div>
+                        )
+                      )}
+                    </div>
+                    <label className="flex items-center gap-1.5 text-[10px] text-white/80">
+                      <input
+                        type="checkbox"
+                        checked={includeQrCodeInWa}
+                        onChange={(e) => setIncludeQrCodeInWa(e.target.checked)}
+                        className="accent-[#C8A25A]"
+                      />
+                      Sertakan Kode QR Tamu
+                    </label>
+                  </div>
+                </div>
+
+                {/* LANGKAH 3: ANTREAN KIRIM 1-KLIK & DAFTAR LINK */}
+                <div className="space-y-3 rounded-xl border border-white/10 bg-white/5 p-3.5">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="text-xs font-bold text-[#E8CD93]">
+                      3. Antrean Sebar WhatsApp ({waSentCount}/{guests.length}{" "}
+                      Terkirim)
+                    </span>
+                    <button
+                      type="button"
+                      onClick={handleCopyAllGuestLinks}
+                      className="inline-flex items-center gap-1 rounded-full bg-white/10 px-2.5 py-1 text-[10px] font-semibold text-white hover:bg-white/20"
+                    >
+                      {copiedAllLinks ? (
+                        <>
+                          <Check className="h-3 w-3 text-emerald-400" />
+                          Semua Disalin!
+                        </>
+                      ) : (
+                        <>
+                          <Copy className="h-3 w-3" />
+                          Salin Semua Link ({waQueueGuests.length})
+                        </>
+                      )}
+                    </button>
+                  </div>
+
+                  {/* Progress bar */}
+                  <div className="h-1.5 w-full overflow-hidden rounded-full bg-black/40">
+                    <div
+                      className="h-full bg-gradient-to-r from-[#C8A25A] to-emerald-400 transition-all duration-300"
+                      style={{
+                        width: `${
+                          guests.length > 0
+                            ? Math.round((waSentCount / guests.length) * 100)
+                            : 0
+                        }%`,
+                      }}
+                    />
+                  </div>
+
+                  {/* Giant 1-Click Send Next Guest Button */}
+                  {nextUnsentGuest ? (
+                    <button
+                      type="button"
+                      onClick={() => handleSendGuestWa(nextUnsentGuest)}
+                      className="flex w-full items-center justify-between gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-500 px-4 py-2.5 text-left text-xs font-bold text-white shadow-lg transition hover:brightness-110 active:scale-[0.99]"
+                    >
+                      <div className="min-w-0">
+                        <p className="text-[10px] uppercase tracking-wider text-emerald-100">
+                          Kirim Cepat Berikutnya ({waUnsentCount} tersisa)
+                        </p>
+                        <p className="truncate text-sm font-bold">
+                          {nextUnsentGuest.name}{" "}
+                          {nextUnsentGuest.phone
+                            ? `(+${nextUnsentGuest.phone})`
+                            : "(Pilih Kontak di WA)"}
+                        </p>
                       </div>
+                      <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-black/25 px-3 py-1 text-[11px]">
+                        Buka WA
+                        <SkipForward className="h-3.5 w-3.5" />
+                      </span>
+                    </button>
+                  ) : guests.length > 0 ? (
+                    <div className="rounded-xl border border-emerald-500/35 bg-emerald-950/40 px-3 py-2 text-center text-xs font-semibold text-emerald-300">
+                      Seluruh {guests.length} tamu sudah ditandai Terkirim WA!
+                    </div>
+                  ) : null}
+
+                  {/* Filter Tabs & Search */}
+                  <div className="flex flex-wrap items-center gap-1.5">
+                    {(
+                      [
+                        { id: "all", label: `Semua (${guests.length})` },
+                        { id: "unsent", label: `Belum (${waUnsentCount})` },
+                        { id: "sent", label: `Terkirim (${waSentCount})` },
+                      ] as const
+                    ).map((f) => (
+                      <button
+                        key={f.id}
+                        type="button"
+                        onClick={() => setWaFilter(f.id)}
+                        className={`rounded-full px-2.5 py-1 text-[10px] font-semibold transition ${
+                          waFilter === f.id
+                            ? "bg-[#C8A25A] text-[#1B1110]"
+                            : "bg-white/10 text-white/75 hover:bg-white/20"
+                        }`}
+                      >
+                        {f.label}
+                      </button>
                     ))}
                   </div>
+
+                  <div className="relative flex items-center">
+                    <Search className="pointer-events-none absolute left-3 h-3.5 w-3.5 text-white/50" />
+                    <input
+                      type="text"
+                      value={waSearch}
+                      onChange={(e) => setWaSearch(e.target.value)}
+                      placeholder="Cari nama tamu, nomor WA, kategori..."
+                      className="w-full rounded-lg border border-white/15 bg-black/30 py-1.5 pl-8 pr-3 text-xs text-white outline-none"
+                    />
+                  </div>
+
+                  {/* Queue Guest Cards */}
+                  <div className="max-h-[420px] space-y-2 overflow-y-auto pr-1">
+                    {waQueueGuests.map((g) => {
+                      const guestUrl = buildGuestUrl(
+                        g.name,
+                        includeQrCodeInWa ? g.code : undefined
+                      );
+                      const isNext = nextUnsentGuest?.id === g.id;
+                      return (
+                        <div
+                          key={g.id}
+                          className={`rounded-lg border p-2.5 transition ${
+                            isNext
+                              ? "border-emerald-400/70 bg-emerald-950/25"
+                              : g.waSent
+                              ? "border-white/10 bg-black/20 opacity-80"
+                              : "border-white/15 bg-black/30"
+                          }`}
+                        >
+                          <div className="flex items-start justify-between gap-2">
+                            <div className="min-w-0">
+                              <div className="flex flex-wrap items-center gap-1.5">
+                                <p className="truncate text-xs font-bold text-white">
+                                  {g.name}
+                                </p>
+                                {g.phone ? (
+                                  <span className="rounded bg-emerald-500/20 px-1.5 py-0.5 font-mono text-[9px] text-emerald-300">
+                                    +{g.phone}
+                                  </span>
+                                ) : (
+                                  <span className="rounded bg-amber-500/15 px-1.5 py-0.5 text-[9px] text-amber-300">
+                                    Tanpa No. WA
+                                  </span>
+                                )}
+                              </div>
+                              <p className="mt-0.5 truncate text-[10px] text-white/50">
+                                {g.category} • {guestUrl}
+                              </p>
+                            </div>
+
+                            <button
+                              type="button"
+                              onClick={() =>
+                                void handleToggleGuestWaSent(g, !g.waSent)
+                              }
+                              title="Ubah status kirim WA"
+                              className={`shrink-0 rounded-full px-2 py-0.5 text-[9px] font-bold transition ${
+                                g.waSent
+                                  ? "bg-sky-500/25 text-sky-200 hover:bg-sky-500/40"
+                                  : "border border-white/20 bg-white/5 text-white/65 hover:bg-white/15"
+                              }`}
+                            >
+                              {g.waSent ? "✓ Terkirim" : "Belum Kirim"}
+                            </button>
+                          </div>
+
+                          <div className="mt-2 flex flex-wrap items-center justify-end gap-1.5 border-t border-white/10 pt-2">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                void navigator.clipboard.writeText(guestUrl);
+                                setCopiedGuestCode(g.code);
+                                setTimeout(() => setCopiedGuestCode(null), 2000);
+                              }}
+                              className="inline-flex items-center gap-1 rounded-full bg-white/10 px-2.5 py-1 text-[10px] font-semibold text-white hover:bg-white/20"
+                            >
+                              {copiedGuestCode === g.code ? (
+                                <Check className="h-3 w-3 text-emerald-400" />
+                              ) : (
+                                <Copy className="h-3 w-3" />
+                              )}
+                              Link
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                void navigator.clipboard.writeText(
+                                  buildGuestMessage(g.name, g.code)
+                                );
+                                setCopiedWaMsgId(g.id);
+                                setTimeout(() => setCopiedWaMsgId(null), 2000);
+                              }}
+                              className="inline-flex items-center gap-1 rounded-full bg-white/10 px-2.5 py-1 text-[10px] font-semibold text-white hover:bg-white/20"
+                            >
+                              {copiedWaMsgId === g.id ? (
+                                <Check className="h-3 w-3 text-emerald-400" />
+                              ) : (
+                                <Copy className="h-3 w-3" />
+                              )}
+                              Pesan
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => handleSendGuestWa(g)}
+                              className="inline-flex items-center gap-1 rounded-full bg-emerald-600 px-3 py-1 text-[10px] font-bold text-white hover:bg-emerald-500"
+                            >
+                              <Send className="h-2.5 w-2.5" />
+                              {g.phone ? "Kirim ke WA" : "Pilih Kontak WA"}
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => void handleDeleteGuest(g)}
+                              aria-label={`Hapus ${g.name}`}
+                              className="rounded-full p-1 text-red-400/75 hover:bg-red-500/15 hover:text-red-300"
+                            >
+                              <Trash2 className="h-3 w-3" />
+                            </button>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  <p className="rounded-lg border border-white/10 bg-black/25 px-3 py-2 text-[10px] leading-relaxed text-white/60">
+                    <strong className="text-white/85">Catatan Keamanan WA:</strong>{" "}
+                    Tombol kirim di atas membuka chat WhatsApp langsung ke nomor tujuan (`wa.me/628...`) sehingga gratis &amp; aman dari pemblokiran akun. Untuk pengiriman otomatis tanpa klik di background, sistem memerlukan API berbayar pihak ketiga (WhatsApp Business Gateway).
+                  </p>
                 </div>
               </div>
             ) : null}
