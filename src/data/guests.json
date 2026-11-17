@@ -5,11 +5,12 @@
     "name": "Uda Rahmat",
     "category": "Keluarga",
     "phone": "6281299887766",
-    "waSent": false,
+    "waSent": true,
     "rsvpStatus": "belum-konfirmasi",
     "pax": 2,
     "checkedIn": false,
-    "updatedAt": "2026-11-17T14:14:45.637Z"
+    "updatedAt": "2026-11-17T14:15:05.634Z",
+    "waSentAt": "2026-11-17T14:15:05.634Z"
   },
   {
     "id": "guest-1794924885637-0j2t",
