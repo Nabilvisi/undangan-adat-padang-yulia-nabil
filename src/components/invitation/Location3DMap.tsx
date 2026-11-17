@@ -173,9 +173,9 @@ export function Location3DMap({ event, theme }: Location3DMapProps) {
 
               {/* CENTER 3D VENUE MONUMENT & FLOATING PIN (Stand Up in 3D Space) */}
               <div
-                className="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center"
+                className="absolute left-1/2 top-1/2 flex flex-col items-center"
                 style={{
-                  transform: `translateZ(36px) rotateZ(${-rotZ}deg) rotateX(${-rotX}deg)`,
+                  transform: `translate(-50%, -50%) translateZ(36px) rotateZ(${-rotZ}deg) rotateX(${-rotX}deg)`,
                 }}
               >
                 <motion.div
@@ -184,14 +184,14 @@ export function Location3DMap({ event, theme }: Location3DMapProps) {
                   className="flex flex-col items-center"
                 >
                   <div
-                    className="rounded-full px-3 py-1 text-[10px] font-bold shadow-xl whitespace-nowrap"
+                    className="max-w-[185px] truncate rounded-full px-3 py-1 text-[10px] font-bold shadow-xl"
                     style={{
                       backgroundColor: theme.accentGoldLight,
                       color: "#1B1110",
                       border: "1.5px solid #FFFFFF",
                     }}
                   >
-                    📍 {event.venueName.slice(0, 28)}
+                    📍 {event.venueName}
                   </div>
 
                   {/* Iconic 3D Gonjong Venue Crest */}
