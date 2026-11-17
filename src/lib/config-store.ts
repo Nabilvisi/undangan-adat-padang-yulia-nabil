@@ -4,7 +4,7 @@ import { EventItem, WeddingConfig } from "@/types/wedding";
 export const DEFAULT_WEDDING_CONFIG: WeddingConfig =
   defaultConfig as WeddingConfig;
 
-export const LOCAL_STORAGE_CONFIG_KEY = "pusako_minang_wedding_config_v3";
+export const LOCAL_STORAGE_CONFIG_KEY = "pusako_minang_wedding_config_v4";
 export const LOCAL_STORAGE_WISHES_KEY = "pusako_minang_wishes_v1";
 
 export function getCoupleOrder(config: WeddingConfig) {

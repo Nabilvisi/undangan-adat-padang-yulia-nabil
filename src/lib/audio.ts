@@ -1,6 +1,7 @@
 import { MusicTrackId } from "@/types/wedding";
 
 export const TRACK_WAV_MAP: Record<Exclude<MusicTrackId, "custom">, string> = {
+  "urang-minang-baralek": "/audio/urang-minang-baralek-gadang.m4a",
   "talempong-baralek": "/audio/talempong-pacik.wav",
   "saluang-bansi": "/audio/saluang-bansi.wav",
   "rabab-pasisia": "/audio/rabab-pasisia.wav",
@@ -19,10 +20,14 @@ export class MinangAudioPlayer {
   private timer: ReturnType<typeof setInterval> | null = null;
   private step = 0;
   private playing = false;
-  private activeTrack: MusicTrackId = "talempong-baralek";
+  private activeTrack: MusicTrackId = "urang-minang-baralek";
   private customUrl = "";
 
   private readonly melodies: Record<Exclude<MusicTrackId, "custom">, number[]> = {
+    "urang-minang-baralek": [
+      392.0, 440.0, 523.25, 587.33, 523.25, 440.0, 392.0, 329.63,
+      392.0, 523.25, 659.25, 587.33, 523.25, 440.0, 392.0, 293.66,
+    ],
     "talempong-baralek": [
       392.0, 440.0, 523.25, 587.33, 523.25, 440.0, 392.0, 329.63,
       392.0, 523.25, 659.25, 587.33, 523.25, 440.0, 392.0, 293.66,
@@ -188,6 +193,12 @@ export const MUSIC_TRACK_OPTIONS: {
   instrumentTag: string;
   subtitle: string;
 }[] = [
+  {
+    id: "urang-minang-baralek",
+    label: "Urang Minang Baralek Gadang (Randy Chow ft. Yeyen Zymra)",
+    instrumentTag: "Lagu Utama Baralek Gadang",
+    subtitle: "Lagu pernikahan adat Minang asli (Sarai Sarumpun Official)",
+  },
   {
     id: "talempong-baralek",
     label: "Talempong Pacik & Gandang Tasa",

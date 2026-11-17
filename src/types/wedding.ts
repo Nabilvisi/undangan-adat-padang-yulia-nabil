@@ -11,6 +11,7 @@ export type FrameStyle = "gonjong-arch" | "oval-ukiran" | "songket-royal";
 export type NameOrder = "bride-first" | "groom-first";
 
 export type MusicTrackId =
+  | "urang-minang-baralek"
   | "talempong-baralek"
   | "saluang-bansi"
   | "rabab-pasisia"

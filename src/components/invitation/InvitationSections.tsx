@@ -25,7 +25,6 @@ import { MinangThemePalette } from "@/lib/themes";
 import {
   buildGoogleCalendarUrl,
   formatIndonesianDate,
-  getCoupleInitials,
   getCoupleOrder,
   getCoupleTitle,
 } from "@/lib/config-store";
@@ -37,6 +36,11 @@ import {
   SuntiangCrownSVG,
   UkiranCornerSVG,
 } from "@/components/ornaments/MinangOrnaments";
+import {
+  Floating3DWeddingRings,
+  InterlockingBotanicalMonogram,
+  Minang25DBorderFrame,
+} from "@/components/ornaments/Minang3DElements";
 import { FramedPortrait } from "./FramedPortrait";
 import { CountdownCard } from "./CountdownCard";
 import { Location3DMap } from "./Location3DMap";
@@ -96,18 +100,19 @@ function EditorialCard({
   return (
     <motion.section
       id={id}
-      initial={{ opacity: 0, y: 26 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, y: 28, rotateX: 6 }}
+      whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
       viewport={{ once: true, amount: 0.14 }}
-      transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
-      className={`relative overflow-hidden rounded-2xl px-6 py-8 shadow-xl ${
-        theme.isLightBase ? "" : "paper-grain"
-      } ${className}`}
+      transition={{ duration: 0.72, ease: [0.22, 1, 0.36, 1] }}
       style={{
         backgroundColor: theme.cardBg,
         border: `1px solid ${theme.cardBorder}`,
         color: theme.textOnCard,
+        transformPerspective: 900,
       }}
+      className={`relative overflow-hidden rounded-2xl px-6 py-8 shadow-xl ${
+        theme.isLightBase ? "" : "paper-grain"
+      } ${className}`}
     >
       {/* Inner recessed archival hairline */}
       <div
@@ -170,7 +175,6 @@ export function InvitationSections({
 }: InvitationSectionsProps) {
   const { first, second, firstIsBride } = getCoupleOrder(config);
   const coupleTitle = getCoupleTitle(config);
-  const initials = getCoupleInitials(config);
   const resolvedGuestCode = deriveDeterministicGuestCode(guestName, guestCode);
 
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
@@ -249,24 +253,21 @@ export function InvitationSections({
           </button>
         ) : null}
 
-        {/* Suntiang Crest & Monogram */}
-        <div className="flex flex-col items-center">
+        {/* 2.5D Ornate Minang Lattice Side Borders & Botanical Corners */}
+        <Minang25DBorderFrame theme={theme} />
+
+        {/* Suntiang Crest & 2.5D Interlocking Botanical Monogram */}
+        <div className="relative z-10 flex flex-col items-center">
           <SuntiangCrownSVG
             color={theme.accentGold}
             className="w-24 h-auto opacity-95"
           />
-          <div
-            className="-mt-2 flex h-14 w-14 items-center justify-center rounded-full font-serif text-lg font-semibold shadow-inner"
-            style={{
-              border: `1.5px solid ${theme.accentGold}`,
-              backgroundColor: theme.isLightBase
-                ? theme.cardBgAlt
-                : theme.bgSticky,
-              color: theme.accentGoldLight,
-            }}
-          >
-            {initials}
-          </div>
+          <InterlockingBotanicalMonogram
+            firstInitial={(first.nickname || "Y").charAt(0).toUpperCase()}
+            secondInitial={(second.nickname || "N").charAt(0).toUpperCase()}
+            theme={theme}
+            className="-mt-3"
+          />
         </div>
 
         <p
@@ -403,21 +404,8 @@ export function InvitationSections({
             return (
               <React.Fragment key={person.roleLabel + idx}>
                 {idx === 1 && (
-                  <div className="flex items-center justify-center gap-4">
-                    <div
-                      className="h-px flex-1"
-                      style={{ backgroundColor: `${theme.accentGold}55` }}
-                    />
-                    <span
-                      className="font-script text-3xl"
-                      style={{ color: theme.accentGoldDark }}
-                    >
-                      &amp;
-                    </span>
-                    <div
-                      className="h-px flex-1"
-                      style={{ backgroundColor: `${theme.accentGold}55` }}
-                    />
+                  <div className="flex flex-col items-center justify-center py-1">
+                    <Floating3DWeddingRings theme={theme} />
                   </div>
                 )}
 
@@ -735,9 +723,21 @@ export function InvitationSections({
 
               <div className="mt-5 grid grid-cols-2 gap-3">
                 {config.gallery.photos.map((photo, index) => (
-                  <button
+                  <motion.button
                     key={photo.id}
                     type="button"
+                    initial={{
+                      opacity: 0,
+                      x: index % 2 === 0 ? -24 : 24,
+                      scale: 0.94,
+                    }}
+                    whileInView={{ opacity: 1, x: 0, scale: 1 }}
+                    viewport={{ once: true, amount: 0.15 }}
+                    transition={{
+                      duration: 0.55,
+                      delay: index * 0.08,
+                      ease: [0.22, 1, 0.36, 1],
+                    }}
                     onClick={() => {
                       setLightboxUrl(photo.url);
                       setLightboxCaption(photo.caption);
@@ -764,7 +764,7 @@ export function InvitationSections({
                         </p>
                       </div>
                     ) : null}
-                  </button>
+                  </motion.button>
                 ))}
               </div>
             </>
