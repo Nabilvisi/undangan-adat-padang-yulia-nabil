@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 760" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="600" y2="760" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#220609"/>
+      <stop offset="50%" stop-color="#461118"/>
+      <stop offset="100%" stop-color="#190406"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="80" y1="80" x2="520" y2="680" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#F5DF9E"/>
+      <stop offset="50%" stop-color="#C8A25A"/>
+      <stop offset="100%" stop-color="#8B6622"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="760" fill="url(#bg)"/>
+  <rect x="30" y="30" width="540" height="700" rx="16" stroke="url(#gold)" stroke-width="1.8" stroke-opacity="0.6"/>
+  <!-- Suntiang Gadang Emas -->
+  <g stroke="url(#gold)" stroke-width="2.2" stroke-linecap="round">
+    <path d="M110 470 C145 240 455 240 490 470 Z" fill="#C8A25A" fill-opacity="0.18"/>
+    <path d="M155 470 C185 295 415 295 445 470 Z" fill="#3B0D12"/>
+    <line x1="300" y1="180" x2="300" y2="290"/>
+    <line x1="235" y1="195" x2="260" y2="298"/>
+    <line x1="365" y1="195" x2="340" y2="298"/>
+    <line x1="175" y1="230" x2="220" y2="318"/>
+    <line x1="425" y1="230" x2="380" y2="318"/>
+    <line x1="125" y1="285" x2="185" y2="350"/>
+    <line x1="475" y1="285" x2="415" y2="350"/>
+    <circle cx="300" cy="176" r="7" fill="#F5DF9E"/>
+    <circle cx="235" cy="191" r="6" fill="#F5DF9E"/>
+    <circle cx="365" cy="191" r="6" fill="#F5DF9E"/>
+    <circle cx="175" cy="226" r="5.5" fill="#F5DF9E"/>
+    <circle cx="425" cy="226" r="5.5" fill="#F5DF9E"/>
+  </g>
+  <text x="300" y="650" text-anchor="middle" fill="#EBD197" font-family="Georgia, serif" font-size="15" letter-spacing="5">MAHKOTA SUNTIANG GADANG</text>
+</svg>

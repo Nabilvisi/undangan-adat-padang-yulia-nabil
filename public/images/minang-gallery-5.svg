@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 760" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="600" y2="760" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#28070B"/>
+      <stop offset="50%" stop-color="#4A1118"/>
+      <stop offset="100%" stop-color="#1E0508"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="80" y1="80" x2="520" y2="680" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#F5DF9E"/>
+      <stop offset="50%" stop-color="#C8A25A"/>
+      <stop offset="100%" stop-color="#8B6622"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="760" fill="url(#bg)"/>
+  <rect x="30" y="30" width="540" height="700" rx="16" stroke="url(#gold)" stroke-width="1.8" stroke-opacity="0.6"/>
+  <!-- Talempong & Saluang Pusako -->
+  <g stroke="url(#gold)" stroke-width="2.2">
+    <circle cx="230" cy="360" r="85" fill="#C8A25A" fill-opacity="0.16"/>
+    <circle cx="230" cy="360" r="32" fill="#F5DF9E" fill-opacity="0.35"/>
+    <circle cx="370" cy="400" r="85" fill="#C8A25A" fill-opacity="0.16"/>
+    <circle cx="370" cy="400" r="32" fill="#F5DF9E" fill-opacity="0.35"/>
+    <line x1="140" y1="520" x2="460" y2="220" stroke-width="8" stroke-linecap="round"/>
+  </g>
+  <text x="300" y="650" text-anchor="middle" fill="#EBD197" font-family="Georgia, serif" font-size="15" letter-spacing="5">TALEMPONG &amp; SALUANG MINANG</text>
+</svg>

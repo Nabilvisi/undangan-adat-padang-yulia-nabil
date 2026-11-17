@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 760" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="600" y2="760" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#2D080C"/>
+      <stop offset="50%" stop-color="#4E131B"/>
+      <stop offset="100%" stop-color="#1B0507"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="80" y1="80" x2="520" y2="680" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#F5DF9E"/>
+      <stop offset="50%" stop-color="#C8A25A"/>
+      <stop offset="100%" stop-color="#8B6622"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="760" fill="url(#bg)"/>
+  <rect x="30" y="30" width="540" height="700" rx="16" stroke="url(#gold)" stroke-width="1.8" stroke-opacity="0.6"/>
+  <!-- Pelaminan Bagonjong & Bantal Gadang -->
+  <g stroke="url(#gold)" stroke-width="2">
+    <path d="M90 300 C160 180 240 160 300 130 C360 160 440 180 510 300 Z" fill="#C8A25A" fill-opacity="0.15"/>
+    <path d="M130 300 H470 V540 H130 Z" fill="#25060A" fill-opacity="0.85"/>
+    <!-- Tirai & Lidah-Lidah Pelaminan -->
+    <path d="M130 300 Q185 350 240 300 Q300 355 360 300 Q415 350 470 300" fill="#C8A25A" fill-opacity="0.22"/>
+    <!-- Bantal Gadang Left & Right -->
+    <rect x="165" y="420" width="75" height="110" rx="8" fill="#C8A25A" fill-opacity="0.2"/>
+    <rect x="360" y="420" width="75" height="110" rx="8" fill="#C8A25A" fill-opacity="0.2"/>
+    <path d="M255 445 H345 V530 H255 Z" fill="#C8A25A" fill-opacity="0.28"/>
+  </g>
+  <text x="300" y="650" text-anchor="middle" fill="#EBD197" font-family="Georgia, serif" font-size="15" letter-spacing="5">PELAMINAN ADAT MINANG</text>
+</svg>

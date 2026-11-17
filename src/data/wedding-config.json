@@ -123,27 +123,47 @@
   "gallery": {
     "enabled": true,
     "heading": "Galeri Momen",
-    "subtitle": "Potret kebersamaan sebelum melangkah menuju pelaminan adat Minangkabau.",
+    "subtitle": "Potret kebersamaan menuju pelaminan adat Minangkabau.",
     "photos": [
       {
         "id": "gal-1",
-        "url": "/images/minang-gallery-1.svg",
-        "caption": "Siluet Rumah Gadang & Songket Pusako"
+        "url": "/images/minang-cover.svg",
+        "caption": "Rumah Gadang Bagonjong"
       },
       {
         "id": "gal-2",
-        "url": "/images/minang-gallery-2.svg",
-        "caption": "Kaluak Paku & Pucuak Rabuang"
+        "url": "/images/minang-bride.svg",
+        "caption": "Pesona Anak Daro"
       },
       {
         "id": "gal-3",
-        "url": "/images/minang-bride.svg",
-        "caption": "Pesona Anak Daro Minangkabau"
+        "url": "/images/minang-groom.svg",
+        "caption": "Kewibawaan Marapulai"
       },
       {
         "id": "gal-4",
-        "url": "/images/minang-groom.svg",
-        "caption": "Kewibawaan Marapulai"
+        "url": "/images/minang-gallery-6.svg",
+        "caption": "Sanding Pelaminan"
+      },
+      {
+        "id": "gal-5",
+        "url": "/images/minang-gallery-1.svg",
+        "caption": "Carano Pasambahan"
+      },
+      {
+        "id": "gal-6",
+        "url": "/images/minang-gallery-2.svg",
+        "caption": "Songket Pandai Sikek"
+      },
+      {
+        "id": "gal-7",
+        "url": "/images/minang-gallery-3.svg",
+        "caption": "Bantal Gadang Pelaminan"
+      },
+      {
+        "id": "gal-8",
+        "url": "/images/minang-gallery-4.svg",
+        "caption": "Mahkota Suntiang Gadang"
       }
     ]
   },

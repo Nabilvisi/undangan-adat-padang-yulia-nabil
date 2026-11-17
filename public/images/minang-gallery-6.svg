@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 760" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="600" y2="760" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#2D080C"/>
+      <stop offset="50%" stop-color="#52141C"/>
+      <stop offset="100%" stop-color="#1E0508"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="80" y1="80" x2="520" y2="680" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#F5DF9E"/>
+      <stop offset="50%" stop-color="#C8A25A"/>
+      <stop offset="100%" stop-color="#8B6622"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="760" fill="url(#bg)"/>
+  <rect x="30" y="30" width="540" height="700" rx="16" stroke="url(#gold)" stroke-width="1.8" stroke-opacity="0.6"/>
+  <!-- Sepasang Pengantin Adat Minang -->
+  <g stroke="url(#gold)" stroke-width="2">
+    <path d="M120 560 V260 C120 150 200 100 300 100 C400 100 480 150 480 260 V560 Z" fill="#C8A25A" fill-opacity="0.1"/>
+    <!-- Anak Daro -->
+    <path d="M165 290 C180 215 265 215 280 290" fill="#C8A25A" fill-opacity="0.25"/>
+    <ellipse cx="222" cy="308" rx="28" ry="34" fill="#320A0E"/>
+    <path d="M165 520 C172 415 190 365 222 355 C254 365 272 415 280 520 Z" fill="#320A0E"/>
+    <!-- Marapulai -->
+    <path d="M335 275 C340 235 365 225 382 225 C402 225 422 238 426 275 Z" fill="#C8A25A" fill-opacity="0.25"/>
+    <ellipse cx="380" cy="305" rx="28" ry="34" fill="#320A0E"/>
+    <path d="M320 520 C328 415 348 365 380 355 C412 365 432 415 440 520 Z" fill="#320A0E"/>
+  </g>
+  <text x="300" y="650" text-anchor="middle" fill="#EBD197" font-family="Georgia, serif" font-size="15" letter-spacing="5">ANAK DARO &amp; MARAPULAI</text>
+</svg>

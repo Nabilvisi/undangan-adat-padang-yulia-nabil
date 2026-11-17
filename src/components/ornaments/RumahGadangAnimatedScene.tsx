@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useId } from "react";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { MinangThemePalette } from "@/lib/themes";
 
 interface RumahGadangSceneProps {
@@ -41,25 +41,40 @@ export function RumahGadangAnimatedScene({
   const skyTop = theme.isLightBase ? "#3E0E14" : theme.bgSticky;
   const skyMid = theme.isLightBase ? "#5B161F" : theme.bgPrimary;
 
+  // Live Scroll-Up & Scroll-Down 3D Camera Parallax
+  const { scrollYProgress } = useScroll();
+  const scrollScale = useTransform(scrollYProgress, [0, 0.45, 1], [1, 1.14, 1.03]);
+  const scrollRotateX = useTransform(scrollYProgress, [0, 0.5, 1], [0, 6, -4]);
+  const scrollYShift = useTransform(scrollYProgress, [0, 0.5, 1], ["0%", "-4%", "3%"]);
+
   return (
     <div
       className={`pointer-events-none absolute inset-0 overflow-hidden select-none ${className}`}
       aria-hidden="true"
       style={{ perspective: "1000px" }}
     >
-      {/* 3D Camera Slow Push-In & Orbit Wrapper */}
+      {/* 3D Scroll-Driven Camera Wrapper + Continuous Breathing */}
       <motion.div
-        animate={{
-          scale: [1, 1.048, 1],
-          y: [0, -6, 0],
+        style={{
+          scale: scrollScale,
+          rotateX: scrollRotateX,
+          y: scrollYShift,
+          transformStyle: "preserve-3d",
         }}
-        transition={{
-          duration: 18,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-        className="h-full w-full"
+        className="h-full w-full transition-transform duration-150 ease-out"
       >
+        <motion.div
+          animate={{
+            scale: [1, 1.035, 1],
+            y: [0, -5, 0],
+          }}
+          transition={{
+            duration: 16,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+          className="h-full w-full"
+        >
         <svg
           viewBox="0 0 1200 900"
           fill="none"
@@ -505,6 +520,7 @@ export function RumahGadangAnimatedScene({
             </g>
           </g>
         </svg>
+        </motion.div>
       </motion.div>
 
       {/* LAYER 5: Animated Flying White Doves (Burung Merpati Putih — Short #1 Reference) */}

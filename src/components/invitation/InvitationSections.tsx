@@ -40,6 +40,8 @@ import {
   Floating3DWeddingRings,
   InterlockingBotanicalMonogram,
   Minang25DBorderFrame,
+  MinangCardFloralWings,
+  Reveal3D,
 } from "@/components/ornaments/Minang3DElements";
 import { FramedPortrait } from "./FramedPortrait";
 import { CountdownCard } from "./CountdownCard";
@@ -100,20 +102,23 @@ function EditorialCard({
   return (
     <motion.section
       id={id}
-      initial={{ opacity: 0, y: 28, rotateX: 6 }}
-      whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
-      viewport={{ once: true, amount: 0.14 }}
-      transition={{ duration: 0.72, ease: [0.22, 1, 0.36, 1] }}
+      initial={{ opacity: 0, y: 42, scale: 0.92, rotateX: 11 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1, rotateX: 0 }}
+      viewport={{ once: false, amount: 0.12, margin: "-25px 0px -25px 0px" }}
+      transition={{ duration: 0.78, ease: [0.22, 1, 0.36, 1] }}
       style={{
         backgroundColor: theme.cardBg,
         border: `1px solid ${theme.cardBorder}`,
         color: theme.textOnCard,
-        transformPerspective: 900,
+        transformPerspective: 1000,
       }}
       className={`relative overflow-hidden rounded-2xl px-6 py-8 shadow-xl ${
         theme.isLightBase ? "" : "paper-grain"
       } ${className}`}
     >
+      {/* Swaying White Orchids, Golden Tree Branches & Crimson Leaf Wings */}
+      <MinangCardFloralWings theme={theme} />
+
       {/* Inner recessed archival hairline */}
       <div
         className="pointer-events-none absolute inset-2.5 rounded-xl"
@@ -253,8 +258,8 @@ export function InvitationSections({
           </button>
         ) : null}
 
-        {/* 2.5D Ornate Minang Lattice Side Borders & Botanical Corners */}
-        <Minang25DBorderFrame theme={theme} />
+        {/* 2.5D Ornate Minang Lattice Side Borders, Swaying Golden Trees, White Orchids & Scroll Cue */}
+        <Minang25DBorderFrame theme={theme} showScrollCue />
 
         {/* Suntiang Crest & 2.5D Interlocking Botanical Monogram */}
         <div className="relative z-10 flex flex-col items-center">
@@ -409,7 +414,10 @@ export function InvitationSections({
                   </div>
                 )}
 
-                <div className="flex flex-col items-center text-center">
+                <Reveal3D
+                  variant={idx === 0 ? "slide-left-3d" : "slide-right-3d"}
+                  className="flex flex-col items-center text-center"
+                >
                   <span
                     className="mb-3 rounded-full px-3.5 py-1 font-display text-[10px] font-semibold uppercase tracking-[0.22em]"
                     style={{
@@ -483,7 +491,7 @@ export function InvitationSections({
                         : `@${person.instagram}`}
                     </a>
                   ) : null}
-                </div>
+                </Reveal3D>
               </React.Fragment>
             );
           })}
@@ -527,92 +535,99 @@ export function InvitationSections({
         />
 
         <div className="space-y-4">
-          {activeEvents.map((ev) => (
-            <div
+          {activeEvents.map((ev, evIdx) => (
+            <Reveal3D
               key={ev.id}
+              variant={evIdx % 2 === 0 ? "zoom-down" : "zoom-up"}
               className="rounded-xl p-5 text-center shadow-sm"
-              style={{
-                backgroundColor: theme.cardBgAlt,
-                border: `1px solid ${theme.accentGold}55`,
-              }}
             >
-              <p
-                className="font-display text-[10px] uppercase tracking-[0.22em]"
-                style={{ color: theme.accentGoldDark }}
-              >
-                {ev.subtitle}
-              </p>
-              <h4 className="mt-1 font-serif text-2xl font-bold">{ev.name}</h4>
-
               <div
-                className="mt-3 space-y-1.5 text-xs"
-                style={{ color: theme.textOnCard }}
+                className="rounded-xl p-1"
+                style={{
+                  backgroundColor: theme.cardBgAlt,
+                  border: `1px solid ${theme.accentGold}55`,
+                }}
               >
-                <p className="font-semibold">{formatIndonesianDate(ev.date)}</p>
-                <p
-                  className="inline-flex items-center justify-center gap-1.5"
-                  style={{ color: theme.textOnCardMuted }}
-                >
-                  <Clock className="h-3.5 w-3.5" />
-                  {ev.startTime} — {ev.endTime}
-                </p>
-              </div>
-
-              <div
-                className="mt-3 pt-3 text-xs"
-                style={{ borderTop: `1px dashed ${theme.accentGold}55` }}
-              >
-                <p className="font-semibold">{ev.venueName}</p>
-                <p
-                  className="mt-0.5 leading-relaxed"
-                  style={{ color: theme.textOnCardMuted }}
-                >
-                  {ev.address}
-                </p>
-                {ev.city ? (
+                <div className="p-4">
                   <p
-                    className="mt-0.5 font-medium"
-                    style={{ color: theme.textOnCardMuted }}
+                    className="font-display text-[10px] uppercase tracking-[0.22em]"
+                    style={{ color: theme.accentGoldDark }}
                   >
-                    {ev.city}
+                    {ev.subtitle}
                   </p>
-                ) : null}
-              </div>
+                  <h4 className="mt-1 font-serif text-2xl font-bold">{ev.name}</h4>
 
-              {/* Embedded 3D & Interactive Live Map Directly Inside Website */}
-              <Location3DMap event={ev} theme={theme} />
-
-              <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
-                <a
-                  href={buildGoogleCalendarUrl(ev, coupleTitle)}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-[11px] font-semibold transition hover:opacity-80"
-                  style={{
-                    backgroundColor: theme.accentPrimary,
-                    color: theme.accentPrimaryText,
-                  }}
-                >
-                  <CalendarPlus className="h-3.5 w-3.5" />
-                  Simpan ke Kalender
-                </a>
-                {ev.mapsUrl ? (
-                  <a
-                    href={ev.mapsUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-[11px] font-semibold transition hover:opacity-90"
-                    style={{
-                      border: `1px solid ${theme.accentGold}`,
-                      color: theme.textOnCard,
-                    }}
+                  <div
+                    className="mt-3 space-y-1.5 text-xs"
+                    style={{ color: theme.textOnCard }}
                   >
-                    <MapPin className="h-3.5 w-3.5" />
-                    Rute Navigasi Eksternal
-                  </a>
-                ) : null}
+                    <p className="font-semibold">{formatIndonesianDate(ev.date)}</p>
+                    <p
+                      className="inline-flex items-center justify-center gap-1.5"
+                      style={{ color: theme.textOnCardMuted }}
+                    >
+                      <Clock className="h-3.5 w-3.5" />
+                      {ev.startTime} — {ev.endTime}
+                    </p>
+                  </div>
+
+                  <div
+                    className="mt-3 pt-3 text-xs"
+                    style={{ borderTop: `1px dashed ${theme.accentGold}55` }}
+                  >
+                    <p className="font-semibold">{ev.venueName}</p>
+                    <p
+                      className="mt-0.5 leading-relaxed"
+                      style={{ color: theme.textOnCardMuted }}
+                    >
+                      {ev.address}
+                    </p>
+                    {ev.city ? (
+                      <p
+                        className="mt-0.5 font-medium"
+                        style={{ color: theme.textOnCardMuted }}
+                      >
+                        {ev.city}
+                      </p>
+                    ) : null}
+                  </div>
+
+                  {/* Embedded 3D & Interactive Live Map Directly Inside Website */}
+                  <Location3DMap event={ev} theme={theme} />
+
+                  <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
+                    <a
+                      href={buildGoogleCalendarUrl(ev, coupleTitle)}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-[11px] font-semibold transition hover:opacity-80"
+                      style={{
+                        backgroundColor: theme.accentPrimary,
+                        color: theme.accentPrimaryText,
+                      }}
+                    >
+                      <CalendarPlus className="h-3.5 w-3.5" />
+                      Simpan ke Kalender
+                    </a>
+                    {ev.mapsUrl ? (
+                      <a
+                        href={ev.mapsUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-[11px] font-semibold transition hover:opacity-90"
+                        style={{
+                          border: `1px solid ${theme.accentGold}`,
+                          color: theme.textOnCard,
+                        }}
+                      >
+                        <MapPin className="h-3.5 w-3.5" />
+                        Rute Navigasi Eksternal
+                      </a>
+                    ) : null}
+                  </div>
+                </div>
               </div>
-            </div>
+            </Reveal3D>
           ))}
         </div>
 
@@ -655,8 +670,13 @@ export function InvitationSections({
               className="absolute bottom-2 left-2 top-2 w-px"
               style={{ backgroundColor: `${theme.accentGold}66` }}
             />
-            {config.loveStory.items.map((item) => (
-              <div key={item.id} className="relative">
+            {config.loveStory.items.map((item, idx) => (
+              <Reveal3D
+                key={item.id}
+                variant={idx % 2 === 0 ? "zoom-up" : "slide-right-3d"}
+                delay={idx * 0.08}
+                className="relative"
+              >
                 <span
                   className="absolute -left-[22px] top-1.5 flex h-3.5 w-3.5 items-center justify-center rounded-full"
                   style={{
@@ -684,7 +704,7 @@ export function InvitationSections({
                 >
                   {item.description}
                 </p>
-              </div>
+              </Reveal3D>
             ))}
           </div>
         </EditorialCard>
@@ -721,45 +741,49 @@ export function InvitationSections({
                 </p>
               </div>
 
-              <div className="mt-5 grid grid-cols-2 gap-3">
-                {config.gallery.photos.map((photo, index) => (
+              {/* 8-Photo Gallery Grid: 4 Columns x 2 Rows with Bidirectional 3D Scroll Reveal */}
+              <div className="mt-5 grid grid-cols-4 gap-2">
+                {config.gallery.photos.slice(0, 8).map((photo, index) => (
                   <motion.button
                     key={photo.id}
                     type="button"
                     initial={{
                       opacity: 0,
-                      x: index % 2 === 0 ? -24 : 24,
-                      scale: 0.94,
+                      y: index < 4 ? -28 : 28,
+                      rotateY: index % 2 === 0 ? -22 : 22,
+                      scale: 0.86,
                     }}
-                    whileInView={{ opacity: 1, x: 0, scale: 1 }}
-                    viewport={{ once: true, amount: 0.15 }}
+                    whileInView={{
+                      opacity: 1,
+                      y: 0,
+                      rotateY: 0,
+                      scale: 1,
+                    }}
+                    viewport={{ once: false, amount: 0.15 }}
                     transition={{
-                      duration: 0.55,
-                      delay: index * 0.08,
+                      duration: 0.65,
+                      delay: (index % 4) * 0.07,
                       ease: [0.22, 1, 0.36, 1],
                     }}
                     onClick={() => {
                       setLightboxUrl(photo.url);
                       setLightboxCaption(photo.caption);
                     }}
-                    className={`group relative overflow-hidden rounded-xl text-left shadow-sm transition hover:scale-[1.01] ${
-                      index === 0 && config.gallery.photos.length % 2 === 1
-                        ? "col-span-2 aspect-[16/10]"
-                        : "aspect-[3/4]"
-                    }`}
+                    className="group relative aspect-[3/4] overflow-hidden rounded-xl text-left shadow-sm transition hover:scale-[1.03]"
                     style={{
-                      border: `1px solid ${theme.accentGold}66`,
+                      border: `1px solid ${theme.accentGold}77`,
                       backgroundColor: theme.bgSticky,
+                      transformPerspective: 800,
                     }}
                   >
                     <img
                       src={photo.url}
                       alt={photo.caption || `Galeri ${index + 1}`}
-                      className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                      className="h-full w-full object-cover transition duration-500 group-hover:scale-110"
                     />
                     {photo.caption ? (
-                      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/75 via-black/30 to-transparent p-2.5">
-                        <p className="text-[10px] font-medium text-white/90">
+                      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/35 to-transparent p-1.5">
+                        <p className="truncate text-[8px] font-medium text-white/95">
                           {photo.caption}
                         </p>
                       </div>
@@ -1199,10 +1223,10 @@ export function InvitationSections({
 
       {/* 10. CLOSING CARD */}
       <motion.section
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.2 }}
-        transition={{ duration: 0.7 }}
+        initial={{ opacity: 0, y: 36, scale: 0.9, rotateX: 12 }}
+        whileInView={{ opacity: 1, y: 0, scale: 1, rotateX: 0 }}
+        viewport={{ once: false, amount: 0.18 }}
+        transition={{ duration: 0.78 }}
         className="relative overflow-hidden rounded-2xl px-6 py-10 text-center shadow-2xl"
         style={{
           backgroundColor: theme.isLightBase
@@ -1210,8 +1234,10 @@ export function InvitationSections({
             : "rgba(18, 6, 8, 0.52)",
           border: `1.5px solid ${theme.accentGold}77`,
           color: theme.isLightBase ? theme.textOnCard : theme.textOnPrimary,
+          transformPerspective: 950,
         }}
       >
+        <Minang25DBorderFrame theme={theme} />
         <GonjongRoofSVG
           color={theme.accentGold}
           secondaryColor={theme.accentGoldLight}

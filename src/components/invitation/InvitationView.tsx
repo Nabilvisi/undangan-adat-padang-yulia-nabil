@@ -21,8 +21,8 @@ import {
   getCoupleTitle,
   mergeWeddingConfig,
 } from "@/lib/config-store";
-import { MUSIC_TRACK_OPTIONS, MinangAudioPlayer } from "@/lib/audio";
-import { MusicTrackId, ThemeId, WeddingConfig, WishItem } from "@/types/wedding";
+import { MinangAudioPlayer } from "@/lib/audio";
+import { ThemeId, WeddingConfig, WishItem } from "@/types/wedding";
 import {
   GonjongRoofSVG,
   PayuangKuniangSVG,
@@ -71,7 +71,6 @@ export function InvitationView({
   const [isOpened, setIsOpened] = useState(forceOpened);
   const [isPlaying, setIsPlaying] = useState(false);
   const [showThemeDrawer, setShowThemeDrawer] = useState(false);
-  const [showMusicDrawer, setShowMusicDrawer] = useState(false);
   const [wishes, setWishes] = useState<WishItem[]>(defaultWishes as WishItem[]);
 
   const audioRef = useRef<MinangAudioPlayer | null>(null);
@@ -239,21 +238,6 @@ export function InvitationView({
       );
     } catch {
       // ignore
-    }
-  };
-
-  const handleSelectMusicTrack = (trackId: MusicTrackId) => {
-    const nextConfig = {
-      ...activeConfig,
-      music: { ...activeConfig.music, enabled: true, trackId },
-    };
-    setConfig(nextConfig);
-    if (audioRef.current) {
-      audioRef.current.configure(trackId, activeConfig.music.customAudioUrl);
-      if (!audioRef.current.isPlaying()) {
-        audioRef.current.play();
-      }
-      setIsPlaying(true);
     }
   };
 
@@ -447,7 +431,7 @@ export function InvitationView({
         {/* RIGHT SCROLLABLE MOBILE-FIRST INVITATION COLUMN */}
         <main
           className={`relative mx-auto w-full ${
-            forceMobileLayout ? "max-w-[420px]" : "lg:w-[460px] lg:shrink-0"
+            forceMobileLayout ? "max-w-[440px]" : "lg:w-[500px] lg:shrink-0"
           } min-h-screen px-4 py-6 sm:px-5`}
         >
           {/* Background Iconic Rumah Gadang & Songket Texture for Column */}
@@ -538,74 +522,7 @@ export function InvitationView({
             />
           </div>
 
-          {/* Minang Instrument Quick Picker Drawer */}
-          {showMusicDrawer ? (
-            <div
-              className={`${
-                isEmbeddedPreview ? "sticky bottom-16" : "fixed bottom-20"
-              } left-0 right-0 z-40 mx-auto max-w-[390px] rounded-2xl p-3.5 shadow-2xl backdrop-blur-md ${
-                !isEmbeddedPreview && !forceMobileLayout
-                  ? "lg:left-auto lg:right-8 lg:w-[396px]"
-                  : ""
-              }`}
-              style={{
-                backgroundColor: "rgba(22, 8, 10, 0.95)",
-                border: `1px solid ${theme.accentGold}`,
-                color: "#FBF5EA",
-              }}
-            >
-              <div className="mb-2 flex items-center justify-between">
-                <span className="font-display text-[10px] font-bold uppercase tracking-[0.2em] text-[#E8CD93]">
-                  Pilih Instrumen Musik Minang
-                </span>
-                <button
-                  type="button"
-                  onClick={() => setShowMusicDrawer(false)}
-                  className="text-[11px] text-white/60 hover:text-white"
-                >
-                  Tutup
-                </button>
-              </div>
-              <div className="space-y-1.5">
-                {MUSIC_TRACK_OPTIONS.filter((t) => t.id !== "custom").map(
-                  (track) => {
-                    const active = activeConfig.music.trackId === track.id;
-                    return (
-                      <button
-                        key={track.id}
-                        type="button"
-                        onClick={() => {
-                          handleSelectMusicTrack(track.id);
-                          setShowMusicDrawer(false);
-                        }}
-                        className={`flex w-full items-center justify-between rounded-xl px-3 py-2 text-left text-xs transition ${
-                          active
-                            ? "bg-[#C8A25A]/25 border border-[#E8CD93]"
-                            : "bg-white/5 hover:bg-white/10 border border-transparent"
-                        }`}
-                      >
-                        <div>
-                          <p className="font-semibold text-white">
-                            {track.label}
-                          </p>
-                          <p className="text-[10px] text-[#E8CD93]/80">
-                            {track.instrumentTag}
-                          </p>
-                        </div>
-                        {active ? (
-                          <span className="rounded-full bg-[#E8CD93] px-2 py-0.5 text-[9px] font-bold text-[#1B1110]">
-                            Aktif
-                          </span>
-                        ) : null}
-                      </button>
-                    );
-                  }
-                )}
-              </div>
-            </div>
-          ) : null}
-
-          {/* Floating Music Toggle + Quick Navigation Dock */}
+          {/* Floating Music Toggle (Urang Minang Baralek Gadang) + Quick Navigation Dock */}
           <div
             className={`${
               isEmbeddedPreview ? "sticky bottom-3" : "fixed bottom-4"
@@ -662,34 +579,25 @@ export function InvitationView({
             </button>
 
             {activeConfig.music.enabled ? (
-              <div className="ml-1 flex items-center gap-1">
-                <button
-                  type="button"
-                  onClick={() => setShowMusicDrawer((prev) => !prev)}
-                  title="Ganti Instrumen Musik Minang"
-                  className="hidden sm:inline-flex items-center rounded-full border border-[#E8CD93]/40 bg-white/10 px-2 py-1 text-[9px] font-semibold text-[#E8CD93] hover:bg-white/20"
-                >
-                  Instrumen
-                </button>
-                <button
-                  type="button"
-                  onClick={handleToggleMusic}
-                  aria-label={isPlaying ? "Matikan Musik" : "Putar Musik"}
-                  className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full shadow-md transition ${
-                    isPlaying ? "animate-spin-slow" : ""
-                  }`}
-                  style={{
-                    background: `linear-gradient(135deg, ${theme.accentGoldLight}, ${theme.accentGold})`,
-                    color: "#1B1110",
-                  }}
-                >
-                  {isPlaying ? (
-                    <Pause className="h-4 w-4" />
-                  ) : (
-                    <Music className="h-4 w-4" />
-                  )}
-                </button>
-              </div>
+              <button
+                type="button"
+                onClick={handleToggleMusic}
+                title="Urang Minang Baralek Gadang — Putar / Jeda Musik"
+                aria-label={isPlaying ? "Matikan Musik" : "Putar Musik"}
+                className={`ml-1 flex h-9 w-9 shrink-0 items-center justify-center rounded-full shadow-md transition ${
+                  isPlaying ? "animate-spin-slow" : ""
+                }`}
+                style={{
+                  background: `linear-gradient(135deg, ${theme.accentGoldLight}, ${theme.accentGold})`,
+                  color: "#1B1110",
+                }}
+              >
+                {isPlaying ? (
+                  <Pause className="h-4 w-4" />
+                ) : (
+                  <Music className="h-4 w-4" />
+                )}
+              </button>
             ) : null}
           </div>
         </main>

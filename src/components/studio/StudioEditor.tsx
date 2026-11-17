@@ -850,13 +850,13 @@ export function StudioEditor({
                   </div>
                 </div>
 
-                {/* 5 Authentic Minang Instruments */}
+                {/* Locked Background Song: Urang Minang Baralek Gadang */}
                 <div className="rounded-xl border border-white/10 bg-white/5 p-4 space-y-3">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <Music className="h-4 w-4 text-[#E8CD93]" />
                       <span className="text-xs font-bold uppercase tracking-wider text-[#E8CD93]">
-                        5 Koleksi Instrumen Musik Adat Minang
+                        Musik Latar Undangan
                       </span>
                     </div>
                     <input
@@ -865,124 +865,48 @@ export function StudioEditor({
                       onChange={(e) =>
                         updateLocalCache({
                           ...config,
-                          music: { ...config.music, enabled: e.target.checked },
+                          music: {
+                            ...config.music,
+                            enabled: e.target.checked,
+                            trackId: "urang-minang-baralek",
+                          },
                         })
                       }
                       className="h-4 w-4 accent-[#C8A25A]"
                     />
                   </div>
 
-                  {config.music.enabled ? (
-                    <div className="space-y-2">
-                      {MUSIC_TRACK_OPTIONS.map((track) => {
-                        const isSelected = config.music.trackId === track.id;
-                        const isPreviewing = previewingTrack === track.id;
-                        return (
-                          <div
-                            key={track.id}
-                            className={`flex items-center justify-between gap-2 rounded-xl border p-3 transition ${
-                              isSelected
-                                ? "border-[#E8CD93] bg-[#C8A25A]/15"
-                                : "border-white/10 bg-black/25"
-                            }`}
-                          >
-                            <button
-                              type="button"
-                              onClick={() =>
-                                updateLocalCache({
-                                  ...config,
-                                  music: {
-                                    ...config.music,
-                                    trackId: track.id as MusicTrackId,
-                                  },
-                                })
-                              }
-                              className="flex-1 text-left"
-                            >
-                              <div className="flex items-center gap-2">
-                                <p className="text-xs font-bold text-white">
-                                  {track.label}
-                                </p>
-                                <span className="rounded bg-white/10 px-1.5 py-0.5 text-[9px] text-[#E8CD93]">
-                                  {track.instrumentTag}
-                                </span>
-                              </div>
-                              <p className="mt-0.5 text-[10px] text-white/65">
-                                {track.subtitle}
-                              </p>
-                            </button>
-
-                            {track.id !== "custom" ? (
-                              <button
-                                type="button"
-                                onClick={() =>
-                                  handleToggleStudioAudio(track.id)
-                                }
-                                className={`inline-flex shrink-0 items-center gap-1 rounded-full px-2.5 py-1.5 text-[10px] font-bold transition ${
-                                  isPreviewing
-                                    ? "bg-emerald-500 text-black"
-                                    : "bg-[#C8A25A] text-[#1B1110]"
-                                }`}
-                              >
-                                {isPreviewing ? (
-                                  <>
-                                    <Square className="h-3 w-3" /> Stop
-                                  </>
-                                ) : (
-                                  <>
-                                    <Play className="h-3 w-3" /> Dengar
-                                  </>
-                                )}
-                              </button>
-                            ) : null}
-                          </div>
-                        );
-                      })}
-
-                      {config.music.trackId === "custom" ? (
-                        <div className="space-y-2 pt-2">
-                          <input
-                            type="text"
-                            value={config.music.customAudioUrl}
-                            onChange={(e) =>
-                              updateLocalCache({
-                                ...config,
-                                music: {
-                                  ...config.music,
-                                  customAudioUrl: e.target.value,
-                                },
-                              })
-                            }
-                            placeholder="Tempel URL file .mp3..."
-                            className="w-full rounded-lg border border-white/15 bg-black/30 px-3 py-2 text-xs text-white outline-none"
-                          />
-                          <label className="inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-[#C8A25A]/50 bg-[#C8A25A]/15 px-3 py-1.5 text-[11px] font-semibold text-[#E8CD93]">
-                            <Upload className="h-3.5 w-3.5" />
-                            Upload File MP3
-                            <input
-                              type="file"
-                              accept="audio/*"
-                              className="hidden"
-                              onChange={(e) => {
-                                const file = e.target.files?.[0];
-                                if (file) {
-                                  void uploadAsset(file, "audio", (url) =>
-                                    updateLocalCache({
-                                      ...config,
-                                      music: {
-                                        ...config.music,
-                                        customAudioUrl: url,
-                                      },
-                                    })
-                                  );
-                                }
-                              }}
-                            />
-                          </label>
-                        </div>
-                      ) : null}
+                  <div className="flex items-center justify-between gap-3 rounded-xl border border-[#E8CD93] bg-[#C8A25A]/15 p-3">
+                    <div>
+                      <p className="text-xs font-bold text-white">
+                        Urang Minang Baralek Gadang
+                      </p>
+                      <p className="mt-0.5 text-[10px] text-[#E8CD93]">
+                        Randy Chow Feat. Yeyen Zymra (Sarai Sarumpun Official)
+                      </p>
                     </div>
-                  ) : null}
+                    <button
+                      type="button"
+                      onClick={() =>
+                        handleToggleStudioAudio("urang-minang-baralek")
+                      }
+                      className={`inline-flex shrink-0 items-center gap-1 rounded-full px-3 py-1.5 text-[10px] font-bold transition ${
+                        previewingTrack === "urang-minang-baralek"
+                          ? "bg-emerald-500 text-black"
+                          : "bg-[#C8A25A] text-[#1B1110]"
+                      }`}
+                    >
+                      {previewingTrack === "urang-minang-baralek" ? (
+                        <>
+                          <Square className="h-3 w-3" /> Stop
+                        </>
+                      ) : (
+                        <>
+                          <Play className="h-3 w-3" /> Dengar Lagu
+                        </>
+                      )}
+                    </button>
+                  </div>
                 </div>
 
                 {/* Photo Mode & Frame Style */}
