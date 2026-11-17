@@ -1,8 +1,11 @@
+import { execSync } from "child_process";
 import fs from "fs/promises";
 import os from "os";
 import path from "path";
 
+const DEFAULT_GITHUB_REPO = "Nabilvisi/undangan-adat-padang-yulia-nabil";
 const memoryCache = new Map<string, unknown>();
+let cachedLocalGhToken: string | null | undefined = undefined;
 
 function getRepoFilePath(fileName: string): string {
   return path.join(process.cwd(), "src", "data", fileName);
@@ -12,10 +15,31 @@ function getTmpFilePath(fileName: string): string {
   return path.join(os.tmpdir(), `pusako_minang_${fileName}`);
 }
 
+function resolveGitHubCredentials(): { token: string | null; repo: string } {
+  const repo = process.env.GITHUB_REPO || DEFAULT_GITHUB_REPO;
+  if (process.env.GITHUB_TOKEN) {
+    return { token: process.env.GITHUB_TOKEN, repo };
+  }
+  if (cachedLocalGhToken !== undefined) {
+    return { token: cachedLocalGhToken, repo };
+  }
+  try {
+    const token = execSync("gh auth token", {
+      encoding: "utf-8",
+      stdio: ["ignore", "pipe", "ignore"],
+      timeout: 2500,
+    }).trim();
+    cachedLocalGhToken = token || null;
+  } catch {
+    cachedLocalGhToken = null;
+  }
+  return { token: cachedLocalGhToken, repo };
+}
+
 /**
  * Reads JSON data from:
- * 1. In-memory / /tmp runtime cache (if updated during current deployment)
- * 2. GitHub Contents API (if GITHUB_TOKEN & GITHUB_REPO are set on Vercel)
+ * 1. /tmp runtime cache (if updated during current session)
+ * 2. GitHub Contents API (live from Nabilvisi/undangan-adat-padang-yulia-nabil)
  * 3. Local repository file src/data/<fileName>
  * 4. Bundled fallback value
  */
@@ -23,7 +47,7 @@ export async function readPersistentJson<T>(
   fileName: string,
   fallback: T
 ): Promise<T> {
-  // 1. Check /tmp first on serverless or local if written recently
+  // 1. Check /tmp first if written recently
   try {
     const tmpRaw = await fs.readFile(getTmpFilePath(fileName), "utf-8");
     const parsed = JSON.parse(tmpRaw) as T;
@@ -33,18 +57,30 @@ export async function readPersistentJson<T>(
     // continue
   }
 
-  // 2. If GITHUB_TOKEN & GITHUB_REPO are configured, fetch live from GitHub repo
-  const ghToken = process.env.GITHUB_TOKEN;
-  const ghRepo = process.env.GITHUB_REPO; // e.g. "Nabilvisi/undangan-adat-padang-yulia-nabil"
-  if (ghToken && ghRepo) {
+  // 2. Check local disk src/data/<fileName> when running locally
+  try {
+    const raw = await fs.readFile(getRepoFilePath(fileName), "utf-8");
+    const parsed = JSON.parse(raw) as T;
+    memoryCache.set(fileName, parsed);
+    return parsed;
+  } catch {
+    // continue
+  }
+
+  // 3. Fetch live from GitHub repository
+  const { token, repo } = resolveGitHubCredentials();
+  if (repo) {
     try {
+      const headers: Record<string, string> = {
+        Accept: "application/vnd.github+json",
+      };
+      if (token) {
+        headers.Authorization = `Bearer ${token}`;
+      }
       const res = await fetch(
-        `https://api.github.com/repos/${ghRepo}/contents/src/data/${fileName}`,
+        `https://api.github.com/repos/${repo}/contents/src/data/${fileName}`,
         {
-          headers: {
-            Authorization: `Bearer ${ghToken}`,
-            Accept: "application/vnd.github+json",
-          },
+          headers,
           cache: "no-store",
         }
       );
@@ -58,18 +94,8 @@ export async function readPersistentJson<T>(
         }
       }
     } catch {
-      // fallback to local file
+      // fallback
     }
-  }
-
-  // 3. Check local disk src/data/<fileName>
-  try {
-    const raw = await fs.readFile(getRepoFilePath(fileName), "utf-8");
-    const parsed = JSON.parse(raw) as T;
-    memoryCache.set(fileName, parsed);
-    return parsed;
-  } catch {
-    // fallback
   }
 
   if (memoryCache.has(fileName)) {
@@ -83,7 +109,7 @@ export async function readPersistentJson<T>(
  * Writes JSON data to:
  * 1. Local disk src/data/<fileName> (when writable, e.g. local dev/start)
  * 2. /tmp/pusako_minang_<fileName> + in-memory cache (always writable on Vercel)
- * 3. GitHub Repository via REST API (when GITHUB_TOKEN & GITHUB_REPO are set)
+ * 3. GitHub Repository via REST API (using GITHUB_TOKEN or local `gh auth token`)
  */
 export async function writePersistentJson<T>(
   fileName: string,
@@ -117,15 +143,14 @@ export async function writePersistentJson<T>(
     persistedToTmp = false;
   }
 
-  // 3. Commit to GitHub if GITHUB_TOKEN & GITHUB_REPO are configured
-  const ghToken = process.env.GITHUB_TOKEN;
-  const ghRepo = process.env.GITHUB_REPO;
-  if (ghToken && ghRepo) {
+  // 3. Auto-commit to GitHub repository (Nabilvisi/undangan-adat-padang-yulia-nabil)
+  const { token, repo } = resolveGitHubCredentials();
+  if (token && repo) {
     try {
-      const apiUrl = `https://api.github.com/repos/${ghRepo}/contents/src/data/${fileName}`;
+      const apiUrl = `https://api.github.com/repos/${repo}/contents/src/data/${fileName}`;
       const getRes = await fetch(apiUrl, {
         headers: {
-          Authorization: `Bearer ${ghToken}`,
+          Authorization: `Bearer ${token}`,
           Accept: "application/vnd.github+json",
         },
         cache: "no-store",
@@ -139,7 +164,7 @@ export async function writePersistentJson<T>(
       const putRes = await fetch(apiUrl, {
         method: "PUT",
         headers: {
-          Authorization: `Bearer ${ghToken}`,
+          Authorization: `Bearer ${token}`,
           Accept: "application/vnd.github+json",
           "Content-Type": "application/json",
         },
