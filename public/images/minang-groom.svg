@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 760" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="600" y2="760" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#28070B"/>
+      <stop offset="55%" stop-color="#481219"/>
+      <stop offset="100%" stop-color="#1E0508"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="120" y1="80" x2="480" y2="680" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#F1DA9D"/>
+      <stop offset="50%" stop-color="#C8A25A"/>
+      <stop offset="100%" stop-color="#8A6421"/>
+    </linearGradient>
+    <radialGradient id="halo" cx="50%" cy="42%" r="44%">
+      <stop offset="0%" stop-color="#E7C986" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#E7C986" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="600" height="760" fill="url(#bg)"/>
+  <rect width="600" height="760" fill="url(#halo)"/>
+
+  <circle cx="300" cy="310" r="195" stroke="url(#gold)" stroke-width="1.5" stroke-opacity="0.45"/>
+  <circle cx="300" cy="310" r="182" stroke="url(#gold)" stroke-width="1" stroke-dasharray="5 5" stroke-opacity="0.5"/>
+
+  <!-- Deta / Saluak Minang Headdress -->
+  <g stroke="url(#gold)" stroke-width="2.2">
+    <path d="M225 258 C230 190 275 165 305 162 C338 165 372 192 376 258 C345 245 255 245 225 258 Z" fill="#2A080C"/>
+    <!-- Saluak Fold Lines -->
+    <path d="M235 232 Q300 202 368 232" stroke-width="1.5"/>
+    <path d="M248 206 Q305 182 356 212" stroke-width="1.5"/>
+    <path d="M352 192 L386 168 L374 225" fill="#C8A25A" fill-opacity="0.18"/>
+
+    <!-- Head & Face Silhouette -->
+    <path d="M244 258 V305 C244 345 268 370 300 370 C332 370 356 345 356 305 V258 Z" fill="#320B10"/>
+
+    <!-- Neck & High Collar Baju Penghulu / Rajo -->
+    <path d="M278 368 V396 H322 V368" fill="#29080C"/>
+    <path d="M162 650 C172 505 212 422 274 396 H326 C388 422 428 505 438 650 Z" fill="#23060A"/>
+
+    <!-- Gold Collar & Chest Embroidery -->
+    <path d="M274 396 L300 445 L326 396" fill="#C8A25A" fill-opacity="0.16"/>
+    <line x1="300" y1="445" x2="300" y2="650" stroke-width="2"/>
+    <circle cx="300" cy="465" r="4" fill="#EBD197"/>
+    <circle cx="300" cy="495" r="4" fill="#EBD197"/>
+    <circle cx="300" cy="525" r="4" fill="#EBD197"/>
+
+    <!-- Keris & Songket Waist Sash (Cawek) -->
+    <path d="M210 568 Q300 582 390 568 L398 618 Q300 634 202 618 Z" fill="#C8A25A" fill-opacity="0.16"/>
+    <path d="M272 542 L338 602" stroke-width="3"/>
+    <path d="M262 532 C268 525 278 528 280 538" stroke-width="2.5"/>
+  </g>
+
+  <text x="300" y="705" text-anchor="middle" fill="#EBD197" font-family="Georgia, serif" font-size="16" letter-spacing="6" opacity="0.85">MARAPULAI</text>
+</svg>

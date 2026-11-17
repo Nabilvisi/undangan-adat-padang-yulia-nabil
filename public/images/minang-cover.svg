@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="800" y2="1000" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#28070B"/>
+      <stop offset="50%" stop-color="#4A1118"/>
+      <stop offset="100%" stop-color="#1E0508"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="150" y1="120" x2="650" y2="850" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#EBD197"/>
+      <stop offset="45%" stop-color="#C8A25A"/>
+      <stop offset="100%" stop-color="#8B6622"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="42%" r="48%">
+      <stop offset="0%" stop-color="#C8A25A" stop-opacity="0.28"/>
+      <stop offset="100%" stop-color="#C8A25A" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="songket" width="60" height="60" patternUnits="userSpaceOnUse">
+      <path d="M30 0 L60 30 L30 60 L0 30 Z" stroke="#E5C687" stroke-opacity="0.09" stroke-width="1"/>
+      <path d="M30 10 L50 30 L30 50 L10 30 Z" stroke="#E5C687" stroke-opacity="0.06" stroke-width="0.8"/>
+      <circle cx="30" cy="30" r="3" fill="#E5C687" fill-opacity="0.08"/>
+    </pattern>
+  </defs>
+  <rect width="800" height="1000" fill="url(#bg)"/>
+  <rect width="800" height="1000" fill="url(#songket)"/>
+  <rect width="800" height="1000" fill="url(#glow)"/>
+
+  <!-- Ornamental Arch Frame -->
+  <path d="M80 940 V380 C80 180 220 90 400 70 C580 90 720 180 720 380 V940 Z" stroke="url(#gold)" stroke-width="2.5" stroke-opacity="0.65"/>
+  <path d="M98 922 V385 C98 198 232 112 400 94 C568 112 702 198 702 385 V922 Z" stroke="url(#gold)" stroke-width="1" stroke-opacity="0.4" stroke-dasharray="6 5"/>
+
+  <!-- Golden Crescent & Stars -->
+  <path d="M425 220 A55 55 0 1 0 470 295 A44 44 0 1 1 425 220 Z" fill="url(#gold)" fill-opacity="0.8"/>
+  <circle cx="255" cy="240" r="2.5" fill="#EBD197" fill-opacity="0.7"/>
+  <circle cx="545" cy="240" r="2.5" fill="#EBD197" fill-opacity="0.7"/>
+  <circle cx="310" cy="185" r="2" fill="#EBD197" fill-opacity="0.5"/>
+  <circle cx="495" cy="190" r="2" fill="#EBD197" fill-opacity="0.5"/>
+
+  <!-- Payuang Kuniang Left & Right -->
+  <g stroke="url(#gold)" stroke-width="2" fill="none">
+    <line x1="178" y1="455" x2="178" y2="755" stroke-opacity="0.85"/>
+    <path d="M115 455 Q178 405 241 455 Z" fill="#C8A25A" fill-opacity="0.16"/>
+    <path d="M115 455 L115 470 M136 455 L136 470 M157 455 L157 470 M178 455 L178 470 M199 455 L199 470 M220 455 L220 470 M241 455 L241 470" stroke-opacity="0.75"/>
+    <circle cx="178" cy="418" r="5" fill="#EBD197"/>
+
+    <line x1="622" y1="455" x2="622" y2="755" stroke-opacity="0.85"/>
+    <path d="M559 455 Q622 405 685 455 Z" fill="#C8A25A" fill-opacity="0.16"/>
+    <path d="M559 455 L559 470 M580 455 L580 470 M601 455 L601 470 M622 455 L622 470 M643 455 L643 470 M664 455 L664 470 M685 455 L685 470" stroke-opacity="0.75"/>
+    <circle cx="622" cy="418" r="5" fill="#EBD197"/>
+  </g>
+
+  <!-- Grand Rumah Gadang Bagonjong Illustration -->
+  <g stroke="url(#gold)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round">
+    <!-- Far Left & Right Gonjong -->
+    <path d="M170 430 C210 515 245 535 295 542 L315 570 L205 568 Z" fill="#2A080C" fill-opacity="0.85"/>
+    <path d="M630 430 C590 515 555 535 505 542 L485 570 L595 568 Z" fill="#2A080C" fill-opacity="0.85"/>
+
+    <!-- Inner Left & Right Gonjong -->
+    <path d="M250 385 C285 490 325 512 370 520 L385 560 L265 555 Z" fill="#350B10" fill-opacity="0.9"/>
+    <path d="M550 385 C515 490 475 512 430 520 L415 560 L535 555 Z" fill="#350B10" fill-opacity="0.9"/>
+
+    <!-- Center Rangkiang / Main Gonjong -->
+    <path d="M400 325 C390 420 355 470 310 492 L400 545 L490 492 C445 470 410 420 400 325 Z" fill="#3D0E14"/>
+    <path d="M400 355 L400 535" stroke-width="1.5" stroke-opacity="0.6"/>
+
+    <!-- Carved Facade Body -->
+    <rect x="215" y="568" width="370" height="145" fill="#2D090E" fill-opacity="0.92"/>
+    <line x1="215" y1="598" x2="585" y2="598" stroke-width="1.5"/>
+    <line x1="215" y1="680" x2="585" y2="680" stroke-width="1.5"/>
+
+    <!-- Windows & Carved Panels -->
+    <rect x="242" y="614" width="42" height="50" rx="2" fill="#C8A25A" fill-opacity="0.12"/>
+    <rect x="302" y="614" width="42" height="50" rx="2" fill="#C8A25A" fill-opacity="0.12"/>
+    <rect x="456" y="614" width="42" height="50" rx="2" fill="#C8A25A" fill-opacity="0.12"/>
+    <rect x="516" y="614" width="42" height="50" rx="2" fill="#C8A25A" fill-opacity="0.12"/>
+
+    <!-- Center Ceremonial Doorway & Stairs -->
+    <path d="M368 713 V625 C368 608 432 608 432 625 V713 Z" fill="#C8A25A" fill-opacity="0.18"/>
+    <path d="M360 713 H440 L458 765 H342 Z" fill="#24060A"/>
+    <line x1="352" y1="730" x2="448" y2="730" stroke-width="1.5"/>
+    <line x1="347" y1="747" x2="453" y2="747" stroke-width="1.5"/>
+
+    <!-- Stilts / Tonggak Tuo -->
+    <line x1="235" y1="713" x2="235" y2="765" stroke-width="4"/>
+    <line x1="295" y1="713" x2="295" y2="765" stroke-width="4"/>
+    <line x1="505" y1="713" x2="505" y2="765" stroke-width="4"/>
+    <line x1="565" y1="713" x2="565" y2="765" stroke-width="4"/>
+    <line x1="150" y1="765" x2="650" y2="765" stroke-width="2" stroke-opacity="0.8"/>
+  </g>
+
+  <!-- Pucuak Rabuang Bottom Frieze -->
+  <g stroke="url(#gold)" stroke-width="1.5" fill="#C8A25A" fill-opacity="0.14">
+    <polygon points="150,860 185,805 220,860"/>
+    <polygon points="220,860 255,805 290,860"/>
+    <polygon points="290,860 325,805 360,860"/>
+    <polygon points="360,860 395,805 430,860"/>
+    <polygon points="430,860 465,805 500,860"/>
+    <polygon points="500,860 535,805 570,860"/>
+    <polygon points="570,860 605,805 640,860"/>
+  </g>
+</svg>

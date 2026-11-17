@@ -1,0 +1,26 @@
+[
+  {
+    "id": "trx-1",
+    "referenceCode": "TRX-MN-88412",
+    "senderName": "Keluarga Bapak Ahmad",
+    "guestCode": "MN-YN-A801",
+    "amount": 500000,
+    "method": "QRIS Instan",
+    "vaOrAccountNumber": "QRIS-YN-88412",
+    "message": "Tanda kasih untuk Yulia & Nabil, semoga samawa!",
+    "status": "terverifikasi",
+    "createdAt": "2026-11-17T09:05:00.000Z"
+  },
+  {
+    "id": "trx-2",
+    "referenceCode": "TRX-MN-91204",
+    "senderName": "Rizki Pratama & Keluarga",
+    "guestCode": "MN-YN-C915",
+    "amount": 250000,
+    "method": "VA Bank Nagari",
+    "vaOrAccountNumber": "7701210002108899",
+    "message": "Selamat menempuh hidup baru Nabil & Yulia!",
+    "status": "berhasil-konfirmasi",
+    "createdAt": "2026-11-17T09:25:00.000Z"
+  }
+]

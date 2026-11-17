@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 760" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="600" y2="760" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#360C11"/>
+      <stop offset="55%" stop-color="#51151D"/>
+      <stop offset="100%" stop-color="#27080B"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="120" y1="80" x2="480" y2="680" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#F1DA9D"/>
+      <stop offset="50%" stop-color="#C8A25A"/>
+      <stop offset="100%" stop-color="#8A6421"/>
+    </linearGradient>
+    <radialGradient id="halo" cx="50%" cy="42%" r="44%">
+      <stop offset="0%" stop-color="#E7C986" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#E7C986" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="600" height="760" fill="url(#bg)"/>
+  <rect width="600" height="760" fill="url(#halo)"/>
+
+  <!-- Ornamental Halo Rings -->
+  <circle cx="300" cy="310" r="195" stroke="url(#gold)" stroke-width="1.5" stroke-opacity="0.45"/>
+  <circle cx="300" cy="310" r="182" stroke="url(#gold)" stroke-width="1" stroke-dasharray="5 5" stroke-opacity="0.5"/>
+
+  <!-- Suntiang Gadang Radial Fan Rays -->
+  <g stroke="url(#gold)" stroke-width="2" stroke-linecap="round">
+    <path d="M135 280 C165 130 435 130 465 280" fill="#C8A25A" fill-opacity="0.16"/>
+    <path d="M160 278 C188 158 412 158 440 278" fill="#51151D" fill-opacity="0.7"/>
+    <!-- Suntiang Spikes -->
+    <line x1="300" y1="108" x2="300" y2="175"/>
+    <line x1="255" y1="115" x2="270" y2="180"/>
+    <line x1="345" y1="115" x2="330" y2="180"/>
+    <line x1="212" y1="132" x2="240" y2="192"/>
+    <line x1="388" y1="132" x2="360" y2="192"/>
+    <line x1="175" y1="160" x2="215" y2="210"/>
+    <line x1="425" y1="160" x2="385" y2="210"/>
+    <line x1="145" y1="196" x2="195" y2="235"/>
+    <line x1="455" y1="196" x2="405" y2="235"/>
+    <line x1="125" y1="240" x2="180" y2="262"/>
+    <line x1="475" y1="240" x2="420" y2="262"/>
+
+    <!-- Suntiang Jewels -->
+    <circle cx="300" cy="108" r="5" fill="#F1DA9D"/>
+    <circle cx="255" cy="115" r="4" fill="#F1DA9D"/>
+    <circle cx="345" cy="115" r="4" fill="#F1DA9D"/>
+    <circle cx="212" cy="132" r="4" fill="#F1DA9D"/>
+    <circle cx="388" cy="132" r="4" fill="#F1DA9D"/>
+    <circle cx="175" cy="160" r="3.5" fill="#F1DA9D"/>
+    <circle cx="425" cy="160" r="3.5" fill="#F1DA9D"/>
+  </g>
+
+  <!-- Stylized Anak Daro Silhouette & Baju Kurung Basiba -->
+  <g stroke="url(#gold)" stroke-width="2.2">
+    <!-- Head / Hair Frame -->
+    <ellipse cx="300" cy="300" rx="52" ry="66" fill="#320B10"/>
+    <path d="M250 288 C265 258 335 258 350 288" stroke-width="2.5"/>
+    <!-- Traditional Earrings (Subang) -->
+    <circle cx="242" cy="318" r="7" fill="#C8A25A" fill-opacity="0.35"/>
+    <circle cx="358" cy="318" r="7" fill="#C8A25A" fill-opacity="0.35"/>
+    <!-- Neck & Kalung Dukuh -->
+    <path d="M282 363 V392 Q300 404 318 392 V363" fill="#320B10"/>
+    <path d="M245 415 Q300 475 355 415" stroke-width="2.5"/>
+    <path d="M258 430 Q300 482 342 430" stroke-width="1.5"/>
+    <circle cx="300" cy="458" r="7" fill="#EBD197"/>
+
+    <!-- Shoulders & Songket Baju Kurung -->
+    <path d="M165 650 C175 510 218 425 278 400 Q300 412 322 400 C382 425 425 510 435 650 Z" fill="#26070B"/>
+    <!-- Songket Shoulder Sash (Salempang) -->
+    <path d="M242 415 L370 650 M272 404 L405 650" stroke-width="1.6" stroke-opacity="0.75"/>
+    <!-- Songket Pattern Diamonds on Dress -->
+    <path d="M300 495 L322 525 L300 555 L278 525 Z" stroke-opacity="0.5"/>
+    <path d="M300 565 L322 595 L300 625 L278 595 Z" stroke-opacity="0.5"/>
+  </g>
+
+  <text x="300" y="705" text-anchor="middle" fill="#EBD197" font-family="Georgia, serif" font-size="16" letter-spacing="6" opacity="0.85">ANAK DARO</text>
+</svg>

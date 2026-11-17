@@ -1,0 +1,204 @@
+{
+  "themeId": "sirah-gadang",
+  "photoMode": "with-photo",
+  "frameStyle": "gonjong-arch",
+  "nameOrder": "bride-first",
+  "slug": "yulia-nabil",
+  "cover": {
+    "subtitle": "Maimbau Baralek Gadang",
+    "title": "The Wedding of",
+    "coverPhoto": "/images/minang-cover.svg",
+    "stickyPhoto": "/images/minang-cover.svg",
+    "defaultGuestName": "Bapak / Ibu / Saudara/i",
+    "dateDisplay": "Sabtu, 20 Desember 2026"
+  },
+  "bride": {
+    "nickname": "Yulia",
+    "fullName": "Yulia Alfianeri",
+    "gala": "",
+    "showGala": false,
+    "roleLabel": "Anak Daro",
+    "childOrder": "Putri dari",
+    "fatherName": "Bapak Alfian (Edit Nama Ayah)",
+    "motherName": "Ibu ... (Edit Nama Ibu)",
+    "suku": "Suku ... — Padang",
+    "instagram": "@yuliaalfianeri",
+    "photo": "/images/minang-bride.svg"
+  },
+  "groom": {
+    "nickname": "Nabil",
+    "fullName": "Nabil Visi Samawi",
+    "gala": "Bergelar Sutan ... (Opsional)",
+    "showGala": true,
+    "roleLabel": "Marapulai",
+    "childOrder": "Putra dari",
+    "fatherName": "Bapak ... (Edit Nama Ayah)",
+    "motherName": "Ibu ... (Edit Nama Ibu)",
+    "suku": "Suku ... — Sumatera Barat",
+    "instagram": "@nabilvisisamawi",
+    "photo": "/images/minang-groom.svg"
+  },
+  "pasambahan": {
+    "arabicBismillah": "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ",
+    "minangPantun": "Mambaok basikapiik siriah, mambuka basilek kato. Adat basandi syarak, syarak basandi Kitabullah.",
+    "quoteText": "Dan di antara tanda-tanda (kebesaran)-Nya ialah Dia menciptakan untukmu pasangan hidup dari jenismu sendiri, supaya kamu merasa tenteram di sisinya, dan dijadikan-Nya di antaramu rasa kasih dan sayang.",
+    "quoteSource": "QS. Ar-Rum : 21",
+    "invitationIntro": "Assalamu’alaikum Warahmatullahi Wabarakatuh. Dengan memohon rahmat dan ridho Allah SWT serta menjunjung tinggi adat basandi syarak, kami mengundang Bapak/Ibu/Saudara/i untuk menghadiri acara pernikahan putra-putri kami:"
+  },
+  "countdownDate": "2026-12-20T09:00",
+  "events": [
+    {
+      "id": "malam-bainai",
+      "enabled": false,
+      "name": "Malam Bainai",
+      "subtitle": "Prosesi Adat Menjelang Akad",
+      "date": "2026-12-19",
+      "startTime": "19:30 WIB",
+      "endTime": "22:00 WIB",
+      "venueName": "Kediaman Mempelai Wanita",
+      "address": "Jl. Khatib Sulaiman, Kec. Padang Utara (Dapat diedit di Studio)",
+      "city": "Padang, Sumatera Barat",
+      "mapsUrl": "https://maps.google.com/?q=Masjid+Raya+Sumatera+Barat+Padang",
+      "lat": -0.9242,
+      "lng": 100.3624,
+      "landmarkNote": "Kawasan Khatib Sulaiman — Akses parkir luas di halaman utama"
+    },
+    {
+      "id": "akad-nikah",
+      "enabled": true,
+      "name": "Akad Nikah",
+      "subtitle": "Ijab & Qabul Pernikahan",
+      "date": "2026-12-20",
+      "startTime": "08:30 WIB",
+      "endTime": "10:00 WIB",
+      "venueName": "Masjid Raya Syekh Ahmad Khatib Al-Minangkabawi (Dapat Diedit)",
+      "address": "Jl. Khatib Sulaiman, Alai Parak Kopi, Kec. Padang Utara",
+      "city": "Kota Padang, Sumatera Barat",
+      "mapsUrl": "https://maps.google.com/?q=Masjid+Raya+Sumatera+Barat+Padang",
+      "lat": -0.9242,
+      "lng": 100.3624,
+      "landmarkNote": "Arsitektur Atap Bagonjong Ikonik Kota Padang"
+    },
+    {
+      "id": "baralek-gadang",
+      "enabled": true,
+      "name": "Baralek Gadang",
+      "subtitle": "Resepsi Pernikahan Adat Minang",
+      "date": "2026-12-20",
+      "startTime": "11:00 WIB",
+      "endTime": "16:00 WIB",
+      "venueName": "Auditorium Istana Gubernur / Balai Adat (Dapat Diedit)",
+      "address": "Jl. Jenderal Sudirman No. 51, Padang Pasir, Kec. Padang Barat",
+      "city": "Kota Padang, Sumatera Barat",
+      "mapsUrl": "https://maps.google.com/?q=Auditorium+Gubernur+Sumatera+Barat+Padang",
+      "lat": -0.9371,
+      "lng": 100.3604,
+      "landmarkNote": "Pusat Kota Padang — 5 Menit dari Masjid Raya"
+    }
+  ],
+  "loveStory": {
+    "enabled": true,
+    "heading": "Jejak Langkah Kami",
+    "items": [
+      {
+        "id": "story-1",
+        "year": "Awal Pertemuan",
+        "title": "Pertemuan yang Tidak Disengaja",
+        "description": "Berawal dari sapaan sederhana yang menumbuhkan rasa saling memahami dan doa-doa baik di setiap langkah."
+      },
+      {
+        "id": "story-2",
+        "year": "Maanta Tando",
+        "title": "Mengikat Janji Dua Keluarga",
+        "description": "Dengan restu orang tua serta ninik mamak, dua keluarga besar dipertemukan untuk menyatukan niat suci menuju pelaminan."
+      },
+      {
+        "id": "story-3",
+        "year": "Baralek Gadang",
+        "title": "Menuju Mahligai Rumah Tangga",
+        "description": "InsyaAllah kami melangkah bersama membangun keluarga sakinah, mawaddah, warahmah yang diberkahi Allah SWT."
+      }
+    ]
+  },
+  "gallery": {
+    "enabled": true,
+    "heading": "Galeri Momen",
+    "subtitle": "Potret kebersamaan sebelum melangkah menuju pelaminan adat Minangkabau.",
+    "photos": [
+      {
+        "id": "gal-1",
+        "url": "/images/minang-gallery-1.svg",
+        "caption": "Siluet Rumah Gadang & Songket Pusako"
+      },
+      {
+        "id": "gal-2",
+        "url": "/images/minang-gallery-2.svg",
+        "caption": "Kaluak Paku & Pucuak Rabuang"
+      },
+      {
+        "id": "gal-3",
+        "url": "/images/minang-bride.svg",
+        "caption": "Pesona Anak Daro Minangkabau"
+      },
+      {
+        "id": "gal-4",
+        "url": "/images/minang-groom.svg",
+        "caption": "Kewibawaan Marapulai"
+      }
+    ]
+  },
+  "liveStreaming": {
+    "enabled": true,
+    "platform": "Instagram Live / YouTube",
+    "scheduleNote": "Siaran langsung saat prosesi Akad Nikah berlangsung",
+    "url": "https://instagram.com",
+    "buttonLabel": "Tonton Siaran Langsung"
+  },
+  "dressCode": {
+    "enabled": true,
+    "note": "Kehadiran Bapak/Ibu/Saudara/i merupakan kehormatan terbesar kami. Berikut nuansa busana yang selaras dengan tema acara:",
+    "menAttire": "Batik Nasional / Kemeja Tenun / Teluk Belanga",
+    "womenAttire": "Baju Kurung Basiba / Kebaya / Busana Muslimah Sopan",
+    "colors": [
+      { "name": "Sirah Marun", "hex": "#54141B" },
+      { "name": "Ameh Kuno", "hex": "#C8A25A" },
+      { "name": "Krem Gading", "hex": "#EFE5D4" },
+      { "name": "Hitam Adat", "hex": "#1B1413" }
+    ]
+  },
+  "gifts": {
+    "enabled": true,
+    "subtitle": "Doa restu Bapak/Ibu adalah karunia yang sangat berarti bagi kami. Apabila berkenan menyampaikan tanda kasih, dapat langsung melalui fitur Transfer QRIS / Virtual Account di bawah ini:",
+    "bankAccounts": [
+      {
+        "id": "bank-1",
+        "bankName": "Bank Nagari / BCA",
+        "accountNumber": "2100-0210-8899",
+        "accountHolder": "Yulia Alfianeri"
+      },
+      {
+        "id": "bank-2",
+        "bankName": "Bank Mandiri / BSI",
+        "accountNumber": "1110-0288-9901",
+        "accountHolder": "Nabil Visi Samawi"
+      }
+    ],
+    "qrisImage": "",
+    "physicalGift": {
+      "enabled": true,
+      "recipient": "Yulia Alfianeri / Nabil Visi Samawi",
+      "phone": "0812-XXXX-XXXX",
+      "address": "Alamat pengiriman kado fisik dapat diedit melalui Studio Editor"
+    }
+  },
+  "music": {
+    "enabled": true,
+    "trackId": "talempong-baralek",
+    "customAudioUrl": ""
+  },
+  "closing": {
+    "thankYouText": "Merupakan suatu kebahagiaan dan kehormatan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir untuk memberikan doa restu kepada kedua mempelai.",
+    "closingPantun": "Kalau ado jarum nan patah, jangan disimpan di dalam peti. Kalau ado kato nan salah, jangan disimpan di dalam hati.",
+    "familySignature": "Kami yang berbahagia, Keluarga Besar Kedua Mempelai"
+  }
+}

@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="800" y2="600" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#350B10"/>
+      <stop offset="100%" stop-color="#1E0508"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="100" y1="80" x2="700" y2="520" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#F0D898"/>
+      <stop offset="50%" stop-color="#C8A25A"/>
+      <stop offset="100%" stop-color="#8B6622"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="600" fill="url(#bg)"/>
+  <rect x="34" y="34" width="732" height="532" stroke="url(#gold)" stroke-width="1.5" stroke-opacity="0.55"/>
+  <rect x="46" y="46" width="708" height="508" stroke="url(#gold)" stroke-width="0.8" stroke-opacity="0.35"/>
+
+  <!-- Carano (Ceremonial Siriah Vessel) -->
+  <g stroke="url(#gold)" stroke-width="2.2">
+    <path d="M275 340 H525 L495 390 H305 Z" fill="#C8A25A" fill-opacity="0.16"/>
+    <path d="M345 390 L325 455 H475 L455 390" fill="#2A080C"/>
+    <ellipse cx="400" cy="455" rx="95" ry="14" fill="#C8A25A" fill-opacity="0.2"/>
+    <!-- Siriah Leaf Cone -->
+    <path d="M325 340 C340 240 375 180 400 135 C425 180 460 240 475 340 Z" fill="#C8A25A" fill-opacity="0.12"/>
+    <path d="M350 340 C362 260 385 215 400 175 C415 215 438 260 450 340" stroke-width="1.5"/>
+    <circle cx="400" cy="128" r="6" fill="#F0D898"/>
+  </g>
+  <text x="400" y="515" text-anchor="middle" fill="#EBD197" font-family="Georgia, serif" font-size="14" letter-spacing="5" opacity="0.8">CARANO PASAMBAHAN MINANG</text>
+</svg>

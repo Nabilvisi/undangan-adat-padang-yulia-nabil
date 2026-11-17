@@ -1,0 +1,18 @@
+[
+  {
+    "id": "wish-1",
+    "name": "Keluarga Besar Ninik Mamak",
+    "attendance": "hadir",
+    "guestCount": 2,
+    "message": "Barakallahu lakuma wa baraka 'alaikuma. Semoga Yulia dan Nabil menjadi keluarga sakinah, mawaddah, warahmah hingga ke anak cucu.",
+    "createdAt": "2026-11-10T08:30:00.000Z"
+  },
+  {
+    "id": "wish-2",
+    "name": "Rizki & Keluarga",
+    "attendance": "hadir",
+    "guestCount": 2,
+    "message": "Selamat menempuh hidup baru untuk Yulia Alfianeri dan Nabil Visi Samawi! InsyaAllah hadir di acara Baralek Gadang.",
+    "createdAt": "2026-11-12T14:15:00.000Z"
+  }
+]

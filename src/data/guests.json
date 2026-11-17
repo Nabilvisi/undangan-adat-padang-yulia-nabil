@@ -1,0 +1,38 @@
+[
+  {
+    "id": "guest-1",
+    "code": "MN-YN-A801",
+    "name": "Keluarga Bapak Ahmad",
+    "category": "Keluarga Besar",
+    "phone": "081234567890",
+    "rsvpStatus": "hadir",
+    "pax": 2,
+    "checkedIn": true,
+    "checkedInAt": "2026-11-17T09:00:00.000Z",
+    "message": "InsyaAllah hadir bersama keluarga. Selamat berbahagia Yulia & Nabil!",
+    "updatedAt": "2026-11-17T09:00:00.000Z"
+  },
+  {
+    "id": "guest-2",
+    "code": "MN-YN-B402",
+    "name": "Datuak Rajo Alam & Bundo Kanduang",
+    "category": "Ninik Mamak / VIP",
+    "phone": "081298765432",
+    "rsvpStatus": "hadir",
+    "pax": 3,
+    "checkedIn": false,
+    "message": "Semoga berkah dunia akhirat dalam Baralek Gadang.",
+    "updatedAt": "2026-11-17T09:15:00.000Z"
+  },
+  {
+    "id": "guest-3",
+    "code": "MN-YN-C915",
+    "name": "Rizki Pratama & Partner",
+    "category": "Sahabat",
+    "phone": "081355667788",
+    "rsvpStatus": "belum-konfirmasi",
+    "pax": 2,
+    "checkedIn": false,
+    "updatedAt": "2026-11-17T09:20:00.000Z"
+  }
+]
