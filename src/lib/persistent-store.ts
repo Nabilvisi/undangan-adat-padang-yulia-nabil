@@ -23,6 +23,10 @@ function resolveGitHubCredentials(): { token: string | null; repo: string } {
   if (cachedLocalGhToken !== undefined) {
     return { token: cachedLocalGhToken, repo };
   }
+  if (process.env.VERCEL) {
+    cachedLocalGhToken = null;
+    return { token: null, repo };
+  }
   try {
     const token = execSync("gh auth token", {
       encoding: "utf-8",
@@ -36,66 +40,81 @@ function resolveGitHubCredentials(): { token: string | null; repo: string } {
   return { token: cachedLocalGhToken, repo };
 }
 
+async function fetchFromGitHub<T>(
+  repo: string,
+  fileName: string,
+  token: string | null
+): Promise<T | null> {
+  try {
+    const headers: Record<string, string> = {
+      Accept: "application/vnd.github+json",
+    };
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+    const res = await fetch(
+      `https://api.github.com/repos/${repo}/contents/src/data/${fileName}`,
+      {
+        headers,
+        cache: "no-store",
+      }
+    );
+    if (res.ok) {
+      const meta = (await res.json()) as { content?: string };
+      if (meta.content) {
+        const decoded = Buffer.from(meta.content, "base64").toString("utf-8");
+        return JSON.parse(decoded) as T;
+      }
+    }
+  } catch {
+    // ignore
+  }
+  return null;
+}
+
 /**
- * Reads JSON data from:
- * 1. /tmp runtime cache (if updated during current session)
- * 2. GitHub Contents API (live from Nabilvisi/undangan-adat-padang-yulia-nabil)
- * 3. Local repository file src/data/<fileName>
- * 4. Bundled fallback value
+ * Reads JSON data seamlessly across both Local and Vercel environments:
+ * - On Vercel: checks /tmp first (for instant in-instance edits), then fetches
+ *   live from GitHub (so any edit pushed from Studio is live immediately without rebuild),
+ *   then falls back to the bundled file.
+ * - On Local: reads from src/data/<fileName> directly.
  */
 export async function readPersistentJson<T>(
   fileName: string,
   fallback: T
 ): Promise<T> {
-  // 1. Check /tmp first if written recently
-  try {
-    const tmpRaw = await fs.readFile(getTmpFilePath(fileName), "utf-8");
-    const parsed = JSON.parse(tmpRaw) as T;
-    memoryCache.set(fileName, parsed);
-    return parsed;
-  } catch {
-    // continue
+  const isVercel = Boolean(process.env.VERCEL);
+  const { token, repo } = resolveGitHubCredentials();
+
+  if (isVercel) {
+    // 1. Check /tmp first (if edited directly on this Vercel instance)
+    try {
+      const tmpRaw = await fs.readFile(getTmpFilePath(fileName), "utf-8");
+      const parsed = JSON.parse(tmpRaw) as T;
+      memoryCache.set(fileName, parsed);
+      return parsed;
+    } catch {
+      // continue
+    }
+
+    // 2. Fetch live from GitHub repository so local Studio edits are immediately live on Vercel
+    if (repo) {
+      const fromGh = await fetchFromGitHub<T>(repo, fileName, token);
+      if (fromGh !== null) {
+        memoryCache.set(fileName, fromGh);
+        return fromGh;
+      }
+    }
   }
 
-  // 2. Check local disk src/data/<fileName> when running locally
+  // 3. Read local disk src/data/<fileName>
   try {
     const raw = await fs.readFile(getRepoFilePath(fileName), "utf-8");
     const parsed = JSON.parse(raw) as T;
     memoryCache.set(fileName, parsed);
     return parsed;
   } catch {
-    // continue
-  }
-
-  // 3. Fetch live from GitHub repository
-  const { token, repo } = resolveGitHubCredentials();
-  if (repo) {
-    try {
-      const headers: Record<string, string> = {
-        Accept: "application/vnd.github+json",
-      };
-      if (token) {
-        headers.Authorization = `Bearer ${token}`;
-      }
-      const res = await fetch(
-        `https://api.github.com/repos/${repo}/contents/src/data/${fileName}`,
-        {
-          headers,
-          cache: "no-store",
-        }
-      );
-      if (res.ok) {
-        const meta = (await res.json()) as { content?: string };
-        if (meta.content) {
-          const decoded = Buffer.from(meta.content, "base64").toString("utf-8");
-          const parsed = JSON.parse(decoded) as T;
-          memoryCache.set(fileName, parsed);
-          return parsed;
-        }
-      }
-    } catch {
-      // fallback
-    }
+    // fallback
   }
 
   if (memoryCache.has(fileName)) {
