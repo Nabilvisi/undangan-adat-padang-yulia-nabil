@@ -144,21 +144,25 @@ export function StudioEditor({
 
     const loadAll = async () => {
       let resolved = initialConfig;
+      let loadedFromServer = false;
       try {
         const res = await fetch("/api/config", { cache: "no-store" });
         if (res.ok) {
           resolved = mergeWeddingConfig(await res.json());
+          loadedFromServer = true;
         }
       } catch {
         // ignore
       }
-      try {
-        const localRaw = window.localStorage.getItem(LOCAL_STORAGE_CONFIG_KEY);
-        if (localRaw) {
-          resolved = mergeWeddingConfig(JSON.parse(localRaw));
+      if (!loadedFromServer) {
+        try {
+          const localRaw = window.localStorage.getItem(LOCAL_STORAGE_CONFIG_KEY);
+          if (localRaw) {
+            resolved = mergeWeddingConfig(JSON.parse(localRaw));
+          }
+        } catch {
+          // ignore
         }
-      } catch {
-        // ignore
       }
       setConfig(resolved);
 

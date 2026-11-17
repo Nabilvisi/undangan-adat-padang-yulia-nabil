@@ -106,24 +106,28 @@ export function InvitationView({
 
     const loadInitial = async () => {
       let resolved = initialConfig;
+      let loadedFromServer = false;
       try {
         const res = await fetch("/api/config", { cache: "no-store" });
         if (res.ok) {
           const serverData = await res.json();
           resolved = mergeWeddingConfig(serverData);
+          loadedFromServer = true;
         }
       } catch {
-        // fallback to initialConfig
+        // fallback to localStorage or initialConfig
       }
 
-      try {
-        const localRaw = window.localStorage.getItem(LOCAL_STORAGE_CONFIG_KEY);
-        if (localRaw) {
-          const parsedLocal = JSON.parse(localRaw);
-          resolved = mergeWeddingConfig(parsedLocal);
+      if (!loadedFromServer) {
+        try {
+          const localRaw = window.localStorage.getItem(LOCAL_STORAGE_CONFIG_KEY);
+          if (localRaw) {
+            const parsedLocal = JSON.parse(localRaw);
+            resolved = mergeWeddingConfig(parsedLocal);
+          }
+        } catch {
+          // ignore localStorage errors
         }
-      } catch {
-        // ignore localStorage errors
       }
 
       if (themeParam && MINANG_THEMES[themeParam]) {
