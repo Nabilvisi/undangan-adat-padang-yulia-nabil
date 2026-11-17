@@ -30,7 +30,6 @@ import {
 } from "@/lib/config-store";
 import {
   CaranoIconSVG,
-  GonjongRoofSVG,
   PayuangKuniangSVG,
   PucuakRabuangDividerSVG,
   SuntiangCrownSVG,
@@ -38,12 +37,16 @@ import {
 } from "@/components/ornaments/MinangOrnaments";
 import {
   Floating3DWeddingRings,
+  FlutteringButterflies,
   InterlockingBotanicalMonogram,
   Minang25DBorderFrame,
   MinangCardFloralWings,
   Reveal3D,
+  RumahGadangGoldCrownSVG,
 } from "@/components/ornaments/Minang3DElements";
-import { FramedPortrait } from "./FramedPortrait";
+import {
+  FramedPortrait,
+} from "./FramedPortrait";
 import { CountdownCard } from "./CountdownCard";
 import { Location3DMap } from "./Location3DMap";
 import {
@@ -104,7 +107,7 @@ function EditorialCard({
       id={id}
       initial={{ opacity: 0, y: 42, scale: 0.92, rotateX: 11 }}
       whileInView={{ opacity: 1, y: 0, scale: 1, rotateX: 0 }}
-      viewport={{ once: false, amount: 0.12, margin: "-25px 0px -25px 0px" }}
+      viewport={{ once: false, amount: 0.01 }}
       transition={{ duration: 0.78, ease: [0.22, 1, 0.36, 1] }}
       style={{
         backgroundColor: theme.cardBg,
@@ -168,6 +171,97 @@ function EditorialCard({
   );
 }
 
+/**
+ * Luxury Double-Ended Pill/Stadium Arch Card crowned with 5-Gonjong Gold Rumah Gadang
+ * & Crimson-Gold Songket Halo Ring (inspired by @GALERIUNDANGAN_OFFICIAL MP4 #2 & #3).
+ */
+function PillArchCard({
+  id,
+  theme,
+  children,
+  editTab,
+  editLabel,
+  onEditSection,
+  showEditBadges,
+  showCrown = true,
+  radiusClass = "rounded-[108px]",
+  innerRadiusClass = "rounded-[98px]",
+  className = "",
+}: {
+  id?: string;
+  theme: MinangThemePalette;
+  children: React.ReactNode;
+  editTab?: StudioTabKey;
+  editLabel?: string;
+  onEditSection?: (tab: StudioTabKey) => void;
+  showEditBadges?: boolean;
+  showCrown?: boolean;
+  radiusClass?: string;
+  innerRadiusClass?: string;
+  className?: string;
+}) {
+  return (
+    <motion.section
+      id={id}
+      initial={{ opacity: 0, y: 44, scale: 0.9, rotateX: 12 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1, rotateX: 0 }}
+      viewport={{ once: false, amount: 0.01 }}
+      transition={{ duration: 0.82, ease: [0.22, 1, 0.36, 1] }}
+      style={{
+        background: `linear-gradient(180deg, ${theme.cardBg} 0%, ${theme.cardBgAlt} 100%)`,
+        border: `2px solid ${theme.accentGold}`,
+        color: theme.textOnCard,
+        boxShadow:
+          "0 22px 48px rgba(18, 4, 7, 0.38), inset 0 0 0 6px rgba(125, 22, 32, 0.08)",
+        transformPerspective: 1000,
+      }}
+      className={`relative overflow-hidden ${radiusClass} px-6 py-12 shadow-2xl ${className}`}
+    >
+      {/* Swaying Orchids & Floral Botanical Wings */}
+      <MinangCardFloralWings theme={theme} />
+
+      {/* Outer Songket Floral Halo Border Ring */}
+      <div
+        className={`pointer-events-none absolute inset-2.5 ${innerRadiusClass}`}
+        style={{
+          border: `1.5px dashed ${theme.accentGold}88`,
+        }}
+      />
+      <div
+        className="pointer-events-none absolute inset-4 rounded-[110px]"
+        style={{
+          border: `1px solid ${theme.accentPrimary}33`,
+        }}
+      />
+
+      {showEditBadges && editTab && onEditSection ? (
+        <button
+          type="button"
+          onClick={() => onEditSection(editTab)}
+          className="absolute right-8 top-8 z-20 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-semibold shadow-md transition hover:scale-105"
+          style={{
+            backgroundColor: theme.accentPrimary,
+            color: theme.accentPrimaryText,
+            border: `1px solid ${theme.accentGold}`,
+          }}
+        >
+          <Edit3 className="h-3 w-3" />
+          {editLabel || "Edit"}
+        </button>
+      ) : null}
+
+      <div className="relative z-10">
+        {showCrown ? (
+          <div className="mb-3 flex justify-center">
+            <RumahGadangGoldCrownSVG theme={theme} className="h-12 w-28" />
+          </div>
+        ) : null}
+        {children}
+      </div>
+    </motion.section>
+  );
+}
+
 export function InvitationSections({
   config,
   theme,
@@ -226,19 +320,19 @@ export function InvitationSections({
   const activeEvents = config.events.filter((ev) => ev.enabled);
 
   return (
-    <div className="space-y-6 pb-24">
-      {/* 1. HERO SECTION */}
+    <div className="space-y-7 pb-48">
+      {/* 1. HERO SECTION — Arch Window, Fluttering Butterflies, Suntiang & Monogram */}
       <motion.section
         id="hero"
         initial={{ opacity: 0, y: 18 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7 }}
-        className="relative overflow-hidden rounded-2xl px-6 py-10 text-center shadow-2xl"
+        className="relative overflow-hidden rounded-t-[170px] rounded-b-3xl px-6 pb-11 pt-12 text-center shadow-2xl"
         style={{
-          backgroundColor: theme.isLightBase
-            ? theme.cardBg
-            : "rgba(18, 6, 8, 0.48)",
-          border: `1.5px solid ${theme.accentGold}80`,
+          background: theme.isLightBase
+            ? `linear-gradient(180deg, ${theme.cardBg} 0%, ${theme.cardBgAlt} 100%)`
+            : `radial-gradient(circle at 50% 35%, ${theme.accentPrimary}CC 0%, rgba(20, 5, 8, 0.86) 100%)`,
+          border: `1.5px solid ${theme.accentGold}99`,
           color: theme.isLightBase ? theme.textOnCard : theme.textOnPrimary,
         }}
       >
@@ -246,7 +340,7 @@ export function InvitationSections({
           <button
             type="button"
             onClick={() => onEditSection("foto")}
-            className="absolute right-4 top-4 z-20 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-semibold shadow-md transition hover:scale-105"
+            className="absolute right-6 top-8 z-20 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-semibold shadow-md transition hover:scale-105"
             style={{
               backgroundColor: theme.accentPrimary,
               color: theme.accentPrimaryText,
@@ -260,6 +354,9 @@ export function InvitationSections({
 
         {/* 2.5D Ornate Minang Lattice Side Borders, Swaying Golden Trees, White Orchids & Scroll Cue */}
         <Minang25DBorderFrame theme={theme} showScrollCue />
+
+        {/* Animated Crimson-Gold Butterflies inside Hero (MP4 #3 00:05-00:08) */}
+        <FlutteringButterflies theme={theme} />
 
         {/* Suntiang Crest & 2.5D Interlocking Botanical Monogram */}
         <div className="relative z-10 flex flex-col items-center">
@@ -276,14 +373,14 @@ export function InvitationSections({
         </div>
 
         <p
-          className="mt-5 font-display text-[10px] uppercase tracking-[0.28em]"
+          className="relative z-10 mt-4 font-display text-[10px] uppercase tracking-[0.28em]"
           style={{ color: theme.accentGold }}
         >
           {config.cover.subtitle}
         </p>
 
         <h2
-          className="mt-2 font-serif text-4xl font-semibold tracking-wide"
+          className="relative z-10 mt-2 font-serif text-4xl font-semibold tracking-wide"
           style={{
             color: theme.isLightBase ? theme.textOnCard : theme.textOnPrimary,
           }}
@@ -292,7 +389,7 @@ export function InvitationSections({
         </h2>
 
         <p
-          className="mt-1.5 text-xs uppercase tracking-[0.2em] font-display"
+          className="relative z-10 mt-1.5 text-xs uppercase tracking-[0.2em] font-display"
           style={{
             color: theme.isLightBase
               ? theme.textOnCardMuted
@@ -302,7 +399,7 @@ export function InvitationSections({
           {config.cover.dateDisplay}
         </p>
 
-        <div className="mt-6">
+        <div className="relative z-10 mt-6">
           <FramedPortrait
             src={config.cover.coverPhoto}
             alt={coupleTitle}
@@ -313,7 +410,7 @@ export function InvitationSections({
           />
         </div>
 
-        <div className="mt-6 flex items-center justify-center gap-2">
+        <div className="relative z-10 mt-6 flex items-center justify-center gap-2">
           <PayuangKuniangSVG
             color={theme.accentGold}
             className="h-10 w-6 opacity-80"
@@ -329,7 +426,7 @@ export function InvitationSections({
         </div>
       </motion.section>
 
-      {/* 2. PASAMBAHAN & AYAT SUCI */}
+      {/* 2. PASAMBAHAN MINANG */}
       <EditorialCard
         id="pasambahan"
         theme={theme}
@@ -361,55 +458,57 @@ export function InvitationSections({
           />
 
           <p
-            className="text-sm leading-relaxed"
+            className="text-xs leading-relaxed"
             style={{ color: theme.textOnCard }}
           >
-            “{config.pasambahan.quoteText}”
-          </p>
-          <p
-            className="mt-2 font-display text-[11px] font-semibold uppercase tracking-[0.2em]"
-            style={{ color: theme.accentGoldDark }}
-          >
-            — {config.pasambahan.quoteSource} —
+            {config.pasambahan.invitationIntro}
           </p>
         </div>
       </EditorialCard>
 
-      {/* 3. PROFIL MEMPELAI (ANAK DARO & MARAPULAI) */}
-      <EditorialCard
+      {/* 3. PROFIL MEMPELAI — Crowned with 5-Gonjong Gold Rumah Gadang & We Are Getting Married (MP4 #2/#3) */}
+      <PillArchCard
         id="couple"
         theme={theme}
         editTab="mempelai"
         editLabel="Edit Mempelai"
         onEditSection={onEditSection}
         showEditBadges={showEditBadges}
+        radiusClass="rounded-[68px]"
+        innerRadiusClass="rounded-[60px]"
       >
         <div className="text-center">
           <p
-            className="font-display text-[10px] uppercase tracking-[0.26em]"
+            className="font-script text-3xl leading-none"
+            style={{ color: theme.accentPrimary }}
+          >
+            We Are Getting Married!
+          </p>
+          <p
+            className="mt-1 font-display text-[10px] uppercase tracking-[0.26em]"
             style={{ color: theme.accentGoldDark }}
           >
-            Anak Daro & Marapulai
+            Anak Daro &amp; Marapulai
           </p>
           <h3 className="mt-1 font-serif text-3xl font-semibold">
             Mempelai Berbahagia
           </h3>
-          <p
-            className="mt-3 text-xs leading-relaxed"
-            style={{ color: theme.textOnCardMuted }}
-          >
-            {config.pasambahan.invitationIntro}
-          </p>
         </div>
 
-        <div className="mt-8 space-y-8">
+        <div className="mt-7 space-y-7">
           {[first, second].map((person, idx) => {
             const isBride =
               (idx === 0 && firstIsBride) || (idx === 1 && !firstIsBride);
             return (
               <React.Fragment key={person.roleLabel + idx}>
                 {idx === 1 && (
-                  <div className="flex flex-col items-center justify-center py-1">
+                  <div className="flex flex-col items-center justify-center gap-1 py-1">
+                    <span
+                      className="font-script text-4xl leading-none"
+                      style={{ color: theme.accentGoldDark }}
+                    >
+                      &amp;
+                    </span>
                     <Floating3DWeddingRings theme={theme} />
                   </div>
                 )}
@@ -438,9 +537,15 @@ export function InvitationSections({
                     variant={isBride ? "bride" : "groom"}
                   />
 
-                  <h4 className="mt-5 font-serif text-2xl font-bold tracking-wide">
-                    {person.fullName}
+                  <h4
+                    className="mt-4 font-script text-4xl leading-tight"
+                    style={{ color: theme.accentPrimary }}
+                  >
+                    {person.nickname || person.fullName}
                   </h4>
+                  <p className="mt-0.5 font-serif text-xl font-bold tracking-wide">
+                    {person.fullName}
+                  </p>
 
                   {person.showGala && person.gala ? (
                     <p
@@ -479,10 +584,11 @@ export function InvitationSections({
                       )}`}
                       target="_blank"
                       rel="noreferrer"
-                      className="mt-3 inline-flex items-center gap-1.5 rounded-full px-3.5 py-1 text-[11px] font-medium transition hover:opacity-80"
+                      className="mt-3 inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-[11px] font-semibold shadow-sm transition hover:scale-105"
                       style={{
-                        border: `1px solid ${theme.accentGold}77`,
-                        color: theme.textOnCard,
+                        backgroundColor: theme.accentPrimary,
+                        color: theme.accentPrimaryText,
+                        border: `1px solid ${theme.accentGold}88`,
                       }}
                     >
                       <Instagram className="h-3 w-3" />
@@ -496,143 +602,279 @@ export function InvitationSections({
             );
           })}
         </div>
-      </EditorialCard>
+      </PillArchCard>
 
-      {/* 4. COUNTDOWN & RANGKAIAN ACARA */}
-      <EditorialCard
-        id="events"
-        theme={theme}
-        editTab="acara"
-        editLabel="Edit Acara"
-        onEditSection={onEditSection}
-        showEditBadges={showEditBadges}
+      {/* 4. COUNTDOWN MAROON PHOTO-OVERLAY BANNER & RANGKAIAN ACARA (MP4 #1/#2/#3) */}
+      <motion.section
+        id="countdown"
+        initial={{ opacity: 0, y: 40, scale: 0.94, rotateX: 10 }}
+        whileInView={{ opacity: 1, y: 0, scale: 1, rotateX: 0 }}
+        viewport={{ once: false, amount: 0.01 }}
+        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+        style={{
+          background: `linear-gradient(180deg, ${theme.accentPrimary} 0%, ${theme.bgSticky} 100%)`,
+          border: `1.5px solid ${theme.accentGold}99`,
+          color: "#FBF5EA",
+          transformPerspective: 1000,
+        }}
+        className="relative overflow-hidden rounded-3xl px-5 pb-8 pt-6 text-center shadow-2xl"
       >
-        <div className="text-center">
-          <p
-            className="font-display text-[10px] uppercase tracking-[0.26em]"
-            style={{ color: theme.accentGoldDark }}
-          >
-            Save The Date
-          </p>
-          <h3 className="mt-1 font-serif text-3xl font-semibold">
-            Rangkaian Acara
-          </h3>
-          <p
-            className="mt-1 text-xs"
-            style={{ color: theme.textOnCardMuted }}
-          >
-            Menghitung hari menuju momen bahagia
-          </p>
-        </div>
+        <div
+          className="pointer-events-none absolute inset-2.5 rounded-2xl"
+          style={{ border: `1px solid ${theme.accentGold}44` }}
+        />
 
-        <div className="mt-5">
+        {/* Top Wide Framed Couple Photo Strip */}
+        {config.photoMode === "with-photo" && config.cover.coverPhoto ? (
+          <div
+            className="relative mx-auto mb-5 h-32 w-full overflow-hidden rounded-t-[80px] rounded-b-xl shadow-lg"
+            style={{
+              border: `1.5px solid ${theme.accentGold}`,
+              backgroundColor: theme.bgSticky,
+            }}
+          >
+            {config.cover.coverPhoto.startsWith("/images/minang-") ? (
+              <div className="flex h-full w-full items-center justify-center bg-gradient-to-b from-[#4E1118] to-[#23060A]">
+                <RumahGadangGoldCrownSVG theme={theme} className="h-20 w-44" />
+              </div>
+            ) : (
+              <img
+                src={config.cover.coverPhoto}
+                alt={coupleTitle}
+                className="h-full w-full object-cover object-center"
+              />
+            )}
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent" />
+          </div>
+        ) : null}
+
+        <p
+          className="font-script text-4xl leading-none"
+          style={{ color: theme.accentGoldLight }}
+        >
+          Countdown
+        </p>
+        <p className="mt-1 font-display text-[10px] uppercase tracking-[0.26em] text-white/75">
+          Menghitung Hari Menuju Momen Bahagia
+        </p>
+
+        <div className="relative z-10 mt-5">
           <CountdownCard targetDate={config.countdownDate} theme={theme} />
         </div>
 
         <PucuakRabuangDividerSVG
           color={theme.accentGold}
-          className="mx-auto my-6 h-6 w-52"
+          className="mx-auto my-5 h-5 w-48 opacity-85"
         />
 
-        <div className="space-y-4">
+        <p className="text-xs italic leading-relaxed text-[#F5EAD7]/90">
+          “{config.pasambahan.quoteText}”
+        </p>
+        <p
+          className="mt-2 font-display text-[11px] font-semibold uppercase tracking-[0.2em]"
+          style={{ color: theme.accentGoldLight }}
+        >
+          {config.pasambahan.quoteSource}
+        </p>
+
+        <a
+          href="#events"
+          className="mt-5 inline-flex items-center gap-2 rounded-full px-6 py-2 text-[11px] font-semibold uppercase tracking-[0.18em] shadow-lg transition hover:scale-105"
+          style={{
+            background: `linear-gradient(135deg, ${theme.accentGoldLight}, ${theme.accentGold})`,
+            color: "#1B1110",
+          }}
+        >
+          <CalendarPlus className="h-3.5 w-3.5" />
+          Save The Date
+        </a>
+      </motion.section>
+
+      {/* 4B. WEDDING EVENT SECTION OVER ATMOSPHERIC BACKDROP WITH PILL-ARCH CARDS */}
+      <section
+        id="events"
+        className="relative space-y-5 overflow-hidden rounded-3xl px-4 py-8 shadow-2xl"
+        style={{
+          backgroundColor: theme.isLightBase
+            ? theme.cardBgAlt
+            : "rgba(26, 7, 10, 0.72)",
+          border: `1.5px solid ${theme.accentGold}77`,
+        }}
+      >
+        {/* Subtle Prewedding / Couple Photo Atmosphere Backdrop behind Event Pills (MP4 #1/#3) */}
+        {config.photoMode === "with-photo" &&
+        config.cover.stickyPhoto &&
+        !config.cover.stickyPhoto.startsWith("/images/minang-") ? (
+          <div
+            className="pointer-events-none absolute inset-0 bg-cover bg-center opacity-20 blur-[1px]"
+            style={{ backgroundImage: `url(${config.cover.stickyPhoto})` }}
+          />
+        ) : null}
+        <div
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background: theme.isLightBase
+              ? `linear-gradient(180deg, ${theme.cardBg}E6 0%, ${theme.cardBgAlt}D9 100%)`
+              : `linear-gradient(180deg, rgba(22,6,8,0.68) 0%, rgba(44,11,16,0.78) 100%)`,
+          }}
+        />
+
+        {showEditBadges && onEditSection ? (
+          <button
+            type="button"
+            onClick={() => onEditSection("acara")}
+            className="relative z-20 mx-auto mb-2 flex items-center gap-1.5 rounded-full px-3.5 py-1 text-[11px] font-semibold shadow-md transition hover:scale-105"
+            style={{
+              backgroundColor: theme.accentPrimary,
+              color: theme.accentPrimaryText,
+              border: `1px solid ${theme.accentGold}`,
+            }}
+          >
+            <Edit3 className="h-3 w-3" />
+            Edit Acara
+          </button>
+        ) : null}
+
+        <div className="relative z-10 text-center">
+          <p
+            className="font-script text-4xl leading-none"
+            style={{
+              color: theme.isLightBase
+                ? theme.accentPrimary
+                : theme.accentGoldLight,
+            }}
+          >
+            Wedding Event
+          </p>
+          <h3
+            className="mt-1 font-serif text-3xl font-semibold"
+            style={{
+              color: theme.isLightBase ? theme.textOnCard : "#FBF5EA",
+            }}
+          >
+            Rangkaian Acara
+          </h3>
+          <p
+            className="mt-1 text-xs"
+            style={{
+              color: theme.isLightBase
+                ? theme.textOnCardMuted
+                : "rgba(251,245,234,0.8)",
+            }}
+          >
+            Merupakan kehormatan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir
+          </p>
+        </div>
+
+        <div className="relative z-10 space-y-6">
           {activeEvents.map((ev, evIdx) => (
-            <Reveal3D
+            <PillArchCard
               key={ev.id}
-              variant={evIdx % 2 === 0 ? "zoom-down" : "zoom-up"}
-              className="rounded-xl p-5 text-center shadow-sm"
+              theme={theme}
+              radiusClass="rounded-[88px] sm:rounded-[108px]"
+              innerRadiusClass="rounded-[80px] sm:rounded-[98px]"
+              className={`text-center ${evIdx % 2 === 0 ? "" : ""}`}
             >
-              <div
-                className="rounded-xl p-1"
-                style={{
-                  backgroundColor: theme.cardBgAlt,
-                  border: `1px solid ${theme.accentGold}55`,
-                }}
+              <p
+                className="font-display text-[10px] uppercase tracking-[0.22em]"
+                style={{ color: theme.accentGoldDark }}
               >
-                <div className="p-4">
-                  <p
-                    className="font-display text-[10px] uppercase tracking-[0.22em]"
-                    style={{ color: theme.accentGoldDark }}
-                  >
-                    {ev.subtitle}
-                  </p>
-                  <h4 className="mt-1 font-serif text-2xl font-bold">{ev.name}</h4>
+                {ev.subtitle}
+              </p>
+              <h4 className="mt-1 font-serif text-2xl font-bold uppercase tracking-wide">
+                {ev.name}
+              </h4>
 
-                  <div
-                    className="mt-3 space-y-1.5 text-xs"
-                    style={{ color: theme.textOnCard }}
-                  >
-                    <p className="font-semibold">{formatIndonesianDate(ev.date)}</p>
-                    <p
-                      className="inline-flex items-center justify-center gap-1.5"
-                      style={{ color: theme.textOnCardMuted }}
-                    >
-                      <Clock className="h-3.5 w-3.5" />
-                      {ev.startTime} — {ev.endTime}
-                    </p>
-                  </div>
-
-                  <div
-                    className="mt-3 pt-3 text-xs"
-                    style={{ borderTop: `1px dashed ${theme.accentGold}55` }}
-                  >
-                    <p className="font-semibold">{ev.venueName}</p>
-                    <p
-                      className="mt-0.5 leading-relaxed"
-                      style={{ color: theme.textOnCardMuted }}
-                    >
-                      {ev.address}
-                    </p>
-                    {ev.city ? (
-                      <p
-                        className="mt-0.5 font-medium"
-                        style={{ color: theme.textOnCardMuted }}
-                      >
-                        {ev.city}
-                      </p>
-                    ) : null}
-                  </div>
-
-                  {/* Embedded 3D & Interactive Live Map Directly Inside Website */}
-                  <Location3DMap event={ev} theme={theme} />
-
-                  <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
-                    <a
-                      href={buildGoogleCalendarUrl(ev, coupleTitle)}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-[11px] font-semibold transition hover:opacity-80"
-                      style={{
-                        backgroundColor: theme.accentPrimary,
-                        color: theme.accentPrimaryText,
-                      }}
-                    >
-                      <CalendarPlus className="h-3.5 w-3.5" />
-                      Simpan ke Kalender
-                    </a>
-                    {ev.mapsUrl ? (
-                      <a
-                        href={ev.mapsUrl}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-[11px] font-semibold transition hover:opacity-90"
-                        style={{
-                          border: `1px solid ${theme.accentGold}`,
-                          color: theme.textOnCard,
-                        }}
-                      >
-                        <MapPin className="h-3.5 w-3.5" />
-                        Rute Navigasi Eksternal
-                      </a>
-                    ) : null}
-                  </div>
-                </div>
+              {/* Heart Emblem Divider (MP4 #2/#3 Pill Card Detail) */}
+              <div className="my-2.5 flex items-center justify-center gap-2">
+                <span
+                  className="h-px w-10"
+                  style={{ backgroundColor: `${theme.accentGold}77` }}
+                />
+                <Heart
+                  className="h-3.5 w-3.5 fill-current"
+                  style={{ color: theme.accentPrimary }}
+                />
+                <span
+                  className="h-px w-10"
+                  style={{ backgroundColor: `${theme.accentGold}77` }}
+                />
               </div>
-            </Reveal3D>
+
+              <div
+                className="mt-2 space-y-1 text-xs"
+                style={{ color: theme.textOnCard }}
+              >
+                <p className="font-semibold">{formatIndonesianDate(ev.date)}</p>
+                <p
+                  className="inline-flex items-center justify-center gap-1.5"
+                  style={{ color: theme.textOnCardMuted }}
+                >
+                  <Clock className="h-3.5 w-3.5" />
+                  {ev.startTime} — {ev.endTime}
+                </p>
+              </div>
+
+              <div
+                className="mt-3 pt-3 text-xs"
+                style={{ borderTop: `1px dashed ${theme.accentGold}55` }}
+              >
+                <p className="font-semibold">{ev.venueName}</p>
+                <p
+                  className="mt-0.5 leading-relaxed"
+                  style={{ color: theme.textOnCardMuted }}
+                >
+                  {ev.address}
+                </p>
+                {ev.city ? (
+                  <p
+                    className="mt-0.5 font-medium"
+                    style={{ color: theme.textOnCardMuted }}
+                  >
+                    {ev.city}
+                  </p>
+                ) : null}
+              </div>
+
+              {/* Embedded 3D & Interactive Live Map Directly Inside Website */}
+              <Location3DMap event={ev} theme={theme} />
+
+              <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
+                <a
+                  href={buildGoogleCalendarUrl(ev, coupleTitle)}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-[11px] font-semibold transition hover:opacity-85"
+                  style={{
+                    backgroundColor: theme.accentPrimary,
+                    color: theme.accentPrimaryText,
+                  }}
+                >
+                  <CalendarPlus className="h-3.5 w-3.5" />
+                  Simpan ke Kalender
+                </a>
+                {ev.mapsUrl ? (
+                  <a
+                    href={ev.mapsUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-[11px] font-semibold transition hover:opacity-90"
+                    style={{
+                      border: `1px solid ${theme.accentGold}`,
+                      color: theme.textOnCard,
+                    }}
+                  >
+                    <MapPin className="h-3.5 w-3.5" />
+                    Google Map
+                  </a>
+                ) : null}
+              </div>
+            </PillArchCard>
           ))}
         </div>
 
         {/* UNIQUE QR PASS PER GUEST */}
-        <div className="mt-6">
+        <div className="relative z-10 mt-6 rounded-2xl bg-white/95 p-3 shadow-lg">
           <GuestQrPass
             guestName={guestName}
             guestCode={resolvedGuestCode}
@@ -641,9 +883,9 @@ export function InvitationSections({
             theme={theme}
           />
         </div>
-      </EditorialCard>
+      </section>
 
-      {/* 5. LOVE STORY TIMELINE */}
+      {/* 5. LOVE STORY TIMELINE WITH LEFT HEART NODES (MP4 #1/#2/#3) */}
       {config.loveStory.enabled && config.loveStory.items.length > 0 ? (
         <EditorialCard
           id="story"
@@ -655,20 +897,20 @@ export function InvitationSections({
         >
           <div className="text-center">
             <p
-              className="font-display text-[10px] uppercase tracking-[0.26em]"
-              style={{ color: theme.accentGoldDark }}
+              className="font-script text-3xl leading-none"
+              style={{ color: theme.accentPrimary }}
             >
-              Our Journey
+              Our Love Story
             </p>
             <h3 className="mt-1 font-serif text-3xl font-semibold">
               {config.loveStory.heading}
             </h3>
           </div>
 
-          <div className="relative mt-6 space-y-5 pl-6">
+          <div className="relative mt-7 space-y-5 pl-7">
             <div
-              className="absolute bottom-2 left-2 top-2 w-px"
-              style={{ backgroundColor: `${theme.accentGold}66` }}
+              className="absolute bottom-2 left-2.5 top-2 w-0.5 rounded-full"
+              style={{ backgroundColor: `${theme.accentGold}88` }}
             />
             {config.loveStory.items.map((item, idx) => (
               <Reveal3D
@@ -677,40 +919,50 @@ export function InvitationSections({
                 delay={idx * 0.08}
                 className="relative"
               >
+                {/* Heart Icon Node on Vertical Rail */}
                 <span
-                  className="absolute -left-[22px] top-1.5 flex h-3.5 w-3.5 items-center justify-center rounded-full"
+                  className="absolute -left-[27px] top-3 flex h-5 w-5 items-center justify-center rounded-full shadow-sm"
                   style={{
                     backgroundColor: theme.cardBg,
-                    border: `2px solid ${theme.accentGold}`,
+                    border: `1.5px solid ${theme.accentGold}`,
                   }}
                 >
-                  <span
-                    className="h-1.5 w-1.5 rounded-full"
-                    style={{ backgroundColor: theme.accentPrimary }}
+                  <Heart
+                    className="h-2.5 w-2.5 fill-current"
+                    style={{ color: theme.accentPrimary }}
                   />
                 </span>
-                <p
-                  className="font-display text-[10px] font-semibold uppercase tracking-[0.2em]"
-                  style={{ color: theme.accentGoldDark }}
+
+                <div
+                  className="rounded-t-2xl rounded-b-xl p-4 shadow-sm"
+                  style={{
+                    backgroundColor: theme.cardBgAlt,
+                    border: `1px solid ${theme.accentGold}55`,
+                  }}
                 >
-                  {item.year}
-                </p>
-                <h4 className="mt-0.5 font-serif text-lg font-bold">
-                  {item.title}
-                </h4>
-                <p
-                  className="mt-1 text-xs leading-relaxed"
-                  style={{ color: theme.textOnCardMuted }}
-                >
-                  {item.description}
-                </p>
+                  <p
+                    className="font-display text-[10px] font-semibold uppercase tracking-[0.2em]"
+                    style={{ color: theme.accentGoldDark }}
+                  >
+                    {item.year}
+                  </p>
+                  <h4 className="mt-0.5 font-serif text-lg font-bold">
+                    {item.title}
+                  </h4>
+                  <p
+                    className="mt-1 text-xs leading-relaxed"
+                    style={{ color: theme.textOnCardMuted }}
+                  >
+                    {item.description}
+                  </p>
+                </div>
               </Reveal3D>
             ))}
           </div>
         </EditorialCard>
       ) : null}
 
-      {/* 6. GALERI & LIVE STREAMING */}
+      {/* 6. LIVE STREAMING 3-PANEL TRIPTYCH + GALERI 8 FOTO (4x2) */}
       {(config.gallery.enabled && config.gallery.photos.length > 0) ||
       config.liveStreaming.enabled ? (
         <EditorialCard
@@ -721,14 +973,94 @@ export function InvitationSections({
           onEditSection={onEditSection}
           showEditBadges={showEditBadges}
         >
+          {config.liveStreaming.enabled ? (
+            <Reveal3D
+              variant="zoom-out"
+              className="mb-7 overflow-hidden rounded-2xl p-5 text-center shadow-lg"
+            >
+              <div
+                className="relative overflow-hidden rounded-2xl px-4 py-6 text-center"
+                style={{
+                  background: `linear-gradient(180deg, ${theme.accentPrimary} 0%, ${theme.bgSticky} 100%)`,
+                  border: `1.5px solid ${theme.accentGold}`,
+                  color: "#FBF5EA",
+                }}
+              >
+                {/* 3-Panel Triptych Preview (MP4 #3 00:18-00:19 Live Streaming Showcase) */}
+                <div className="mb-4 grid grid-cols-3 items-end gap-2 px-1">
+                  {[
+                    config.bride.photo,
+                    config.cover.coverPhoto,
+                    config.groom.photo,
+                  ].map((panelSrc, pIdx) => (
+                    <div
+                      key={pIdx}
+                      className={`overflow-hidden rounded-t-full rounded-b-lg border shadow-md ${
+                        pIdx === 1 ? "aspect-[3/4] scale-105 z-10" : "aspect-[3/4] opacity-85"
+                      }`}
+                      style={{
+                        borderColor: theme.accentGold,
+                        backgroundColor: theme.bgSticky,
+                      }}
+                    >
+                      {!panelSrc || panelSrc.startsWith("/images/minang-") ? (
+                        <div className="flex h-full w-full items-center justify-center bg-[#320B10] p-2">
+                          <RumahGadangGoldCrownSVG
+                            theme={theme}
+                            className="h-auto w-full opacity-90"
+                          />
+                        </div>
+                      ) : (
+                        <img
+                          src={panelSrc}
+                          alt={`Live Streaming Preview ${pIdx + 1}`}
+                          className="h-full w-full object-cover object-top"
+                        />
+                      )}
+                    </div>
+                  ))}
+                </div>
+
+                <div className="flex items-center justify-center gap-2">
+                  <Radio className="h-4 w-4" style={{ color: theme.accentGoldLight }} />
+                  <span
+                    className="font-script text-3xl leading-none"
+                    style={{ color: theme.accentGoldLight }}
+                  >
+                    Live Streaming
+                  </span>
+                </div>
+                <p className="mt-1.5 font-serif text-lg font-semibold text-white">
+                  {config.liveStreaming.platform}
+                </p>
+                <p className="mt-1 text-xs text-white/80">
+                  {config.liveStreaming.scheduleNote}
+                </p>
+                <a
+                  href={config.liveStreaming.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="mt-4 inline-flex items-center gap-1.5 rounded-full px-5 py-2 text-xs font-semibold transition hover:scale-105"
+                  style={{
+                    background: `linear-gradient(135deg, ${theme.accentGoldLight}, ${theme.accentGold})`,
+                    color: "#1B1110",
+                  }}
+                >
+                  <ExternalLink className="h-3.5 w-3.5" />
+                  {config.liveStreaming.buttonLabel}
+                </a>
+              </div>
+            </Reveal3D>
+          ) : null}
+
           {config.gallery.enabled && config.gallery.photos.length > 0 ? (
             <>
               <div className="text-center">
                 <p
-                  className="font-display text-[10px] uppercase tracking-[0.26em]"
-                  style={{ color: theme.accentGoldDark }}
+                  className="font-script text-3xl leading-none"
+                  style={{ color: theme.accentPrimary }}
                 >
-                  Portraits &amp; Heritage
+                  Galeri Foto
                 </p>
                 <h3 className="mt-1 font-serif text-3xl font-semibold">
                   {config.gallery.heading}
@@ -741,7 +1073,7 @@ export function InvitationSections({
                 </p>
               </div>
 
-              {/* 8-Photo Gallery Grid: 4 Columns x 2 Rows with Bidirectional 3D Scroll Reveal */}
+              {/* 8-Photo Gallery Grid: STRICT 4 Columns x 2 Rows with Arch-Top Framing & Bidirectional 3D Scroll Reveal */}
               <div className="mt-5 grid grid-cols-4 gap-2">
                 {config.gallery.photos.slice(0, 8).map((photo, index) => (
                   <motion.button
@@ -759,7 +1091,7 @@ export function InvitationSections({
                       rotateY: 0,
                       scale: 1,
                     }}
-                    viewport={{ once: false, amount: 0.15 }}
+                    viewport={{ once: false, amount: 0.02 }}
                     transition={{
                       duration: 0.65,
                       delay: (index % 4) * 0.07,
@@ -769,9 +1101,9 @@ export function InvitationSections({
                       setLightboxUrl(photo.url);
                       setLightboxCaption(photo.caption);
                     }}
-                    className="group relative aspect-[3/4] overflow-hidden rounded-xl text-left shadow-sm transition hover:scale-[1.03]"
+                    className="group relative aspect-[3/4] overflow-hidden rounded-t-[24px] rounded-b-lg text-left shadow-md transition hover:scale-[1.04]"
                     style={{
-                      border: `1px solid ${theme.accentGold}77`,
+                      border: `1.5px solid ${theme.accentGold}88`,
                       backgroundColor: theme.bgSticky,
                       transformPerspective: 800,
                     }}
@@ -792,51 +1124,6 @@ export function InvitationSections({
                 ))}
               </div>
             </>
-          ) : null}
-
-          {config.liveStreaming.enabled ? (
-            <div
-              className="mt-6 rounded-xl p-5 text-center"
-              style={{
-                backgroundColor: theme.cardBgAlt,
-                border: `1px solid ${theme.accentGold}55`,
-              }}
-            >
-              <div className="flex items-center justify-center gap-2">
-                <Radio
-                  className="h-4 w-4"
-                  style={{ color: theme.accentGoldDark }}
-                />
-                <span
-                  className="font-display text-[10px] font-semibold uppercase tracking-[0.22em]"
-                  style={{ color: theme.accentGoldDark }}
-                >
-                  Live Streaming
-                </span>
-              </div>
-              <p className="mt-1.5 font-serif text-xl font-semibold">
-                {config.liveStreaming.platform}
-              </p>
-              <p
-                className="mt-1 text-xs"
-                style={{ color: theme.textOnCardMuted }}
-              >
-                {config.liveStreaming.scheduleNote}
-              </p>
-              <a
-                href={config.liveStreaming.url}
-                target="_blank"
-                rel="noreferrer"
-                className="mt-4 inline-flex items-center gap-1.5 rounded-full px-5 py-2 text-xs font-semibold transition hover:opacity-90"
-                style={{
-                  backgroundColor: theme.accentPrimary,
-                  color: theme.accentPrimaryText,
-                }}
-              >
-                <ExternalLink className="h-3.5 w-3.5" />
-                {config.liveStreaming.buttonLabel}
-              </a>
-            </div>
           ) : null}
         </EditorialCard>
       ) : null}
@@ -940,27 +1227,22 @@ export function InvitationSections({
         </EditorialCard>
       ) : null}
 
-      {/* 8. TANDA KASIH / AMPLOP DIGITAL */}
+      {/* 8. TANDA KASIH / WEDDING GIFT — Crowned Pill-Arch Royal Card (MP4 #2/#3) */}
       {config.gifts.enabled ? (
-        <EditorialCard
+        <PillArchCard
           id="gifts"
           theme={theme}
           editTab="hadiah"
           editLabel="Edit Hadiah"
           onEditSection={onEditSection}
           showEditBadges={showEditBadges}
+          radiusClass="rounded-[64px] sm:rounded-[76px]"
+          innerRadiusClass="rounded-[56px] sm:rounded-[68px]"
         >
           <div className="text-center">
-            <div className="flex justify-center">
-              <Gift
-                className="h-6 w-6"
-                style={{ color: theme.accentGoldDark }}
-                strokeWidth={1.5}
-              />
-            </div>
             <p
-              className="mt-2 font-display text-[10px] uppercase tracking-[0.26em]"
-              style={{ color: theme.accentGoldDark }}
+              className="font-script text-4xl leading-none"
+              style={{ color: theme.accentPrimary }}
             >
               Wedding Gift
             </p>
@@ -985,15 +1267,38 @@ export function InvitationSections({
             theme={theme}
           />
 
-          <div className="mt-4 space-y-3">
+          {/* Heart Emblem Divider */}
+          <div className="my-5 flex items-center justify-center gap-2">
+            <span
+              className="h-px w-12"
+              style={{ backgroundColor: `${theme.accentGold}77` }}
+            />
+            <Heart
+              className="h-4 w-4 fill-current"
+              style={{ color: theme.accentGoldDark }}
+            />
+            <span
+              className="h-px w-12"
+              style={{ backgroundColor: `${theme.accentGold}77` }}
+            />
+          </div>
+
+          <div className="space-y-3">
             {config.gifts.physicalGift.enabled ? (
               <div
-                className="rounded-xl p-4 text-center"
+                className="rounded-2xl p-4 text-center"
                 style={{
                   backgroundColor: theme.cardBgAlt,
-                  border: `1px solid ${theme.accentGold}44`,
+                  border: `1px solid ${theme.accentGold}55`,
                 }}
               >
+                <div className="mb-1 flex justify-center">
+                  <Gift
+                    className="h-5 w-5"
+                    style={{ color: theme.accentGoldDark }}
+                    strokeWidth={1.6}
+                  />
+                </div>
                 <p
                   className="font-display text-[10px] font-semibold uppercase tracking-[0.2em]"
                   style={{ color: theme.accentGoldDark }}
@@ -1015,10 +1320,11 @@ export function InvitationSections({
                   onClick={() =>
                     copyText(config.gifts.physicalGift.address, "phys-addr")
                   }
-                  className="mt-3 inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-[11px] font-semibold"
+                  className="mt-3 inline-flex items-center gap-1.5 rounded-full px-5 py-1.5 text-[11px] font-semibold transition hover:opacity-85"
                   style={{
+                    backgroundColor: theme.accentPrimary,
+                    color: theme.accentPrimaryText,
                     border: `1px solid ${theme.accentGold}`,
-                    color: theme.textOnCard,
                   }}
                 >
                   {copiedKey === "phys-addr" ? (
@@ -1036,39 +1342,50 @@ export function InvitationSections({
               </div>
             ) : null}
           </div>
-        </EditorialCard>
+        </PillArchCard>
       ) : null}
 
-      {/* 9. RSVP & DOA RESTU */}
-      <EditorialCard id="wishes" theme={theme}>
-        <div className="text-center">
-          <div className="flex justify-center">
-            <Heart
-              className="h-6 w-6"
-              style={{ color: theme.accentGoldDark }}
-              strokeWidth={1.5}
-            />
+      {/* 9. RSVP & UCAPAN DOA — Deep Velvet Maroon Showcase Crowned with 5-Gonjong Gold (MP4 #1/#3) */}
+      <motion.section
+        id="wishes"
+        initial={{ opacity: 0, y: 42, scale: 0.92, rotateX: 11 }}
+        whileInView={{ opacity: 1, y: 0, scale: 1, rotateX: 0 }}
+        viewport={{ once: false, amount: 0.01 }}
+        transition={{ duration: 0.78, ease: [0.22, 1, 0.36, 1] }}
+        style={{
+          background: `linear-gradient(180deg, ${theme.accentPrimary} 0%, ${theme.bgSticky} 100%)`,
+          border: `1.5px solid ${theme.accentGold}99`,
+          color: "#FBF5EA",
+          transformPerspective: 1000,
+        }}
+        className="relative overflow-hidden rounded-3xl px-6 py-8 shadow-2xl"
+      >
+        <div
+          className="pointer-events-none absolute inset-2.5 rounded-2xl"
+          style={{ border: `1px solid ${theme.accentGold}44` }}
+        />
+
+        <div className="relative z-10 text-center">
+          <div className="mb-2 flex justify-center">
+            <RumahGadangGoldCrownSVG theme={theme} className="h-11 w-24" />
           </div>
           <p
-            className="mt-2 font-display text-[10px] uppercase tracking-[0.26em]"
-            style={{ color: theme.accentGoldDark }}
+            className="font-script text-4xl leading-none"
+            style={{ color: theme.accentGoldLight }}
           >
-            RSVP &amp; Wishes
+            RSVP &amp; Ucapan Doa
           </p>
-          <h3 className="mt-1 font-serif text-3xl font-semibold">
+          <h3 className="mt-1 font-serif text-3xl font-semibold text-white">
             Konfirmasi &amp; Doa Restu
           </h3>
-          <p
-            className="mt-1.5 text-xs"
-            style={{ color: theme.textOnCardMuted }}
-          >
+          <p className="mt-1.5 text-xs text-white/75">
             Sampaikan ucapan selamat dan konfirmasi kehadiran Anda
           </p>
         </div>
 
-        <form onSubmit={handleWishSubmit} className="mt-5 space-y-3">
+        <form onSubmit={handleWishSubmit} className="relative z-10 mt-5 space-y-3">
           <div>
-            <label className="mb-1 block text-[11px] font-semibold uppercase tracking-wider">
+            <label className="mb-1 block text-[11px] font-semibold uppercase tracking-wider text-white/90">
               Nama Tamu
             </label>
             <input
@@ -1079,8 +1396,8 @@ export function InvitationSections({
               placeholder="Contoh: Keluarga Bapak Ahmad"
               className="w-full rounded-lg px-3.5 py-2.5 text-xs outline-none transition"
               style={{
-                backgroundColor: theme.cardBgAlt,
-                border: `1px solid ${theme.accentGold}66`,
+                backgroundColor: theme.cardBg,
+                border: `1px solid ${theme.accentGold}88`,
                 color: theme.textOnCard,
               }}
             />
@@ -1088,7 +1405,7 @@ export function InvitationSections({
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="mb-1 block text-[11px] font-semibold uppercase tracking-wider">
+              <label className="mb-1 block text-[11px] font-semibold uppercase tracking-wider text-white/90">
                 Kehadiran
               </label>
               <select
@@ -1100,8 +1417,8 @@ export function InvitationSections({
                 }
                 className="w-full rounded-lg px-3 py-2.5 text-xs outline-none"
                 style={{
-                  backgroundColor: theme.cardBgAlt,
-                  border: `1px solid ${theme.accentGold}66`,
+                  backgroundColor: theme.cardBg,
+                  border: `1px solid ${theme.accentGold}88`,
                   color: theme.textOnCard,
                 }}
               >
@@ -1112,11 +1429,14 @@ export function InvitationSections({
             </div>
 
             <div>
-              <label className="mb-1 block text-[11px] font-semibold uppercase tracking-wider">
+              <label className="mb-1 block text-[11px] font-semibold uppercase tracking-wider text-white/90">
                 Jumlah Tamu
               </label>
               <div className="relative flex items-center">
-                <Users className="pointer-events-none absolute left-3 h-3.5 w-3.5 opacity-60" />
+                <Users
+                  className="pointer-events-none absolute left-3 h-3.5 w-3.5 opacity-60"
+                  style={{ color: theme.textOnCard }}
+                />
                 <input
                   type="number"
                   min={1}
@@ -1127,8 +1447,8 @@ export function InvitationSections({
                   }
                   className="w-full rounded-lg py-2.5 pl-8 pr-3 text-xs outline-none"
                   style={{
-                    backgroundColor: theme.cardBgAlt,
-                    border: `1px solid ${theme.accentGold}66`,
+                    backgroundColor: theme.cardBg,
+                    border: `1px solid ${theme.accentGold}88`,
                     color: theme.textOnCard,
                   }}
                 />
@@ -1137,7 +1457,7 @@ export function InvitationSections({
           </div>
 
           <div>
-            <label className="mb-1 block text-[11px] font-semibold uppercase tracking-wider">
+            <label className="mb-1 block text-[11px] font-semibold uppercase tracking-wider text-white/90">
               Ucapan &amp; Doa
             </label>
             <textarea
@@ -1148,8 +1468,8 @@ export function InvitationSections({
               placeholder="Tuliskan doa terbaik untuk kedua mempelai..."
               className="w-full rounded-lg px-3.5 py-2.5 text-xs outline-none"
               style={{
-                backgroundColor: theme.cardBgAlt,
-                border: `1px solid ${theme.accentGold}66`,
+                backgroundColor: theme.cardBg,
+                border: `1px solid ${theme.accentGold}88`,
                 color: theme.textOnCard,
               }}
             />
@@ -1158,10 +1478,10 @@ export function InvitationSections({
           <button
             type="submit"
             disabled={wishSubmitting}
-            className="flex w-full items-center justify-center gap-2 rounded-full py-3 text-xs font-semibold uppercase tracking-[0.16em] transition hover:opacity-90 disabled:opacity-60"
+            className="flex w-full items-center justify-center gap-2 rounded-full py-3 text-xs font-semibold uppercase tracking-[0.16em] shadow-lg transition hover:scale-[1.01] disabled:opacity-60"
             style={{
-              backgroundColor: theme.accentPrimary,
-              color: theme.accentPrimaryText,
+              background: `linear-gradient(135deg, ${theme.accentGoldLight}, ${theme.accentGold})`,
+              color: "#1B1110",
             }}
           >
             <Send className="h-3.5 w-3.5" />
@@ -1169,21 +1489,22 @@ export function InvitationSections({
           </button>
 
           {wishSuccess ? (
-            <p className="text-center text-xs font-semibold text-emerald-700">
+            <p className="text-center text-xs font-semibold text-emerald-300">
               Terima kasih! Ucapan dan konfirmasi Anda telah tersimpan.
             </p>
           ) : null}
         </form>
 
-        {/* Wishes Feed */}
-        <div className="mt-6 max-h-72 space-y-3 overflow-y-auto pr-1">
+        {/* Frosted Wishes Feed (MP4 #1/#3 Ucapan Doa Bubbles) */}
+        <div className="relative z-10 mt-6 max-h-72 space-y-3 overflow-y-auto pr-1">
           {wishes.map((w) => (
             <div
               key={w.id}
-              className="rounded-xl p-3.5"
+              className="rounded-xl p-3.5 backdrop-blur-sm"
               style={{
-                backgroundColor: theme.cardBgAlt,
-                border: `1px solid ${theme.accentGold}44`,
+                backgroundColor: "rgba(252, 249, 243, 0.94)",
+                border: `1px solid ${theme.accentGold}77`,
+                color: theme.textOnCard,
               }}
             >
               <div className="flex items-center justify-between gap-2">
@@ -1219,67 +1540,89 @@ export function InvitationSections({
             </div>
           ))}
         </div>
-      </EditorialCard>
+      </motion.section>
 
-      {/* 10. CLOSING CARD */}
+      {/* 10. CLOSING ARCH PORTRAIT — Terima Kasih + Butterflies above Foreground Rumah Gadang (MP4 #3 00:35) */}
       <motion.section
         initial={{ opacity: 0, y: 36, scale: 0.9, rotateX: 12 }}
         whileInView={{ opacity: 1, y: 0, scale: 1, rotateX: 0 }}
-        viewport={{ once: false, amount: 0.18 }}
+        viewport={{ once: false, amount: 0.01 }}
         transition={{ duration: 0.78 }}
-        className="relative overflow-hidden rounded-2xl px-6 py-10 text-center shadow-2xl"
+        className="relative overflow-hidden rounded-t-[170px] rounded-b-3xl px-6 pb-14 pt-12 text-center shadow-2xl"
         style={{
-          backgroundColor: theme.isLightBase
-            ? theme.cardBg
-            : "rgba(18, 6, 8, 0.52)",
-          border: `1.5px solid ${theme.accentGold}77`,
-          color: theme.isLightBase ? theme.textOnCard : theme.textOnPrimary,
+          background: theme.isLightBase
+            ? `linear-gradient(180deg, ${theme.cardBg} 0%, ${theme.cardBgAlt} 100%)`
+            : `radial-gradient(circle at 50% 35%, ${theme.accentPrimary}CC 0%, rgba(18, 5, 7, 0.88) 100%)`,
+          border: `1.5px solid ${theme.accentGold}99`,
+          color: theme.isLightBase ? theme.textOnCard : "#FBF5EA",
           transformPerspective: 950,
         }}
       >
         <Minang25DBorderFrame theme={theme} />
-        <GonjongRoofSVG
-          color={theme.accentGold}
-          secondaryColor={theme.accentGoldLight}
-          className="mx-auto w-44 h-auto opacity-90"
-        />
+        <FlutteringButterflies theme={theme} />
 
-        <p
-          className="mt-4 text-xs leading-relaxed"
-          style={{
-            color: theme.isLightBase
-              ? theme.textOnCardMuted
-              : theme.textOnPrimaryMuted,
-          }}
-        >
-          {config.closing.thankYouText}
-        </p>
+        <div className="relative z-10 flex flex-col items-center">
+          <div className="mt-2">
+            <FramedPortrait
+              src={config.cover.coverPhoto}
+              alt={coupleTitle}
+              frameStyle={config.frameStyle}
+              photoMode={config.photoMode}
+              theme={theme}
+              variant="cover"
+            />
+          </div>
 
-        <p
-          className="mt-3 font-serif text-sm italic"
-          style={{ color: theme.accentGoldLight }}
-        >
-          “{config.closing.closingPantun}”
-        </p>
+          <p
+            className="mt-5 font-script text-4xl leading-none"
+            style={{ color: theme.accentGoldLight }}
+          >
+            Terima Kasih
+          </p>
 
-        <PucuakRabuangDividerSVG
-          color={theme.accentGold}
-          className="mx-auto my-5 h-6 w-48"
-        />
+          <p
+            className="mt-3 text-xs leading-relaxed"
+            style={{
+              color: theme.isLightBase
+                ? theme.textOnCardMuted
+                : "rgba(251, 245, 234, 0.86)",
+            }}
+          >
+            {config.closing.thankYouText}
+          </p>
 
-        <p className="text-xs font-medium opacity-85">
-          {config.closing.familySignature}
-        </p>
-        <h3 className="mt-2 font-serif text-3xl font-semibold">
-          {coupleTitle}
-        </h3>
-        <p
-          className="mt-4 inline-flex items-center gap-1.5 text-[10px] uppercase tracking-[0.22em]"
-          style={{ color: theme.accentGold }}
-        >
-          <Sparkles className="h-3 w-3" />
-          Pusako Minangkabau Digital Invitation
-        </p>
+          <p
+            className="mt-3 font-serif text-sm italic"
+            style={{ color: theme.accentGoldLight }}
+          >
+            “{config.closing.closingPantun}”
+          </p>
+
+          <PucuakRabuangDividerSVG
+            color={theme.accentGold}
+            className="mx-auto my-5 h-6 w-48"
+          />
+
+          <p className="text-xs font-medium opacity-85">
+            {config.closing.familySignature}
+          </p>
+          <h3 className="mt-2 font-serif text-3xl font-semibold">
+            {coupleTitle}
+          </h3>
+          <p
+            className="mt-1 font-display text-[11px] uppercase tracking-[0.22em]"
+            style={{ color: theme.accentGoldLight }}
+          >
+            {config.cover.dateDisplay}
+          </p>
+          <p
+            className="mt-4 inline-flex items-center gap-1.5 text-[10px] uppercase tracking-[0.22em]"
+            style={{ color: theme.accentGold }}
+          >
+            <Sparkles className="h-3 w-3" />
+            Pusako Minangkabau Digital Invitation
+          </p>
+        </div>
       </motion.section>
 
       {/* Lightbox Modal */}

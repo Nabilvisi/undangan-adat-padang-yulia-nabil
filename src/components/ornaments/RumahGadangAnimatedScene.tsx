@@ -3,6 +3,7 @@
 import React, { useId } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { MinangThemePalette } from "@/lib/themes";
+import { FlutteringButterflies } from "@/components/ornaments/Minang3DElements";
 
 interface RumahGadangSceneProps {
   theme: MinangThemePalette;
@@ -230,14 +231,14 @@ export function RumahGadangAnimatedScene({
             />
           </g>
 
-          {/* Highland Pine Trees (Left & Right Midground) */}
+          {/* Highland Pine Trees & Etched Palm Silhouettes (Left & Right Midground, MP4 #1/#3 Reference) */}
           {[110, 165, 220, 855, 995, 1060].map((tx, i) => (
             <g
               key={tx}
               opacity={0.42 + (i % 2) * 0.12}
-              fill="#192822"
+              fill={i % 2 === 0 ? "#4D171F" : "#192822"}
               stroke={gold}
-              strokeOpacity="0.22"
+              strokeOpacity="0.24"
               strokeWidth="0.8"
             >
               <polygon points={`${tx},370 ${tx - 26},435 ${tx + 26},435`} />
@@ -245,6 +246,29 @@ export function RumahGadangAnimatedScene({
               <polygon points={`${tx},455 ${tx - 42},540 ${tx + 42},540`} />
             </g>
           ))}
+
+          {/* Etched Tall Minang Palm Trees & Autumn Crimson Canopy (Side Borders) */}
+          <g opacity="0.58" stroke={goldLight} strokeOpacity="0.35">
+            {/* Left Palm */}
+            <path d="M88 640 C74 510 82 370 112 245" stroke={gold} strokeWidth="5" strokeLinecap="round" fill="none" />
+            <g transform="translate(112, 245)" fill="#7E1E28" fillOpacity="0.5">
+              <path d="M0 0 C-42 -26 -72 -10 -86 16 C-52 2 -24 2 0 0 Z" />
+              <path d="M0 0 C-26 -42 -48 -46 -62 -28 C-34 -24 -16 -14 0 0 Z" />
+              <path d="M0 0 C38 -30 68 -18 82 10 C48 0 22 0 0 0 Z" />
+              <path d="M0 0 C18 -42 42 -48 56 -30 C32 -22 14 -12 0 0 Z" />
+            </g>
+            {/* Right Palm */}
+            <path d="M1112 640 C1126 510 1118 370 1088 245" stroke={gold} strokeWidth="5" strokeLinecap="round" fill="none" />
+            <g transform="translate(1088, 245)" fill="#7E1E28" fillOpacity="0.5">
+              <path d="M0 0 C-38 -30 -68 -18 -82 10 C-48 0 -22 0 0 0 Z" />
+              <path d="M0 0 C-18 -42 -42 -48 -56 -30 C-32 -22 -14 -12 0 0 Z" />
+              <path d="M0 0 C42 -26 72 -10 86 16 C52 2 24 2 0 0 Z" />
+              <path d="M0 0 C26 -42 48 -46 62 -28 C34 -24 16 -14 0 0 Z" />
+            </g>
+            {/* Outer Autumn Crimson Leaves Canopies */}
+            <ellipse cx="45" cy="185" rx="75" ry="125" fill="#6F1722" fillOpacity="0.42" />
+            <ellipse cx="1155" cy="185" rx="75" ry="125" fill="#6F1722" fillOpacity="0.42" />
+          </g>
 
           {/* Left & Right Rangkiang (Traditional Rice Barns) */}
           <g
@@ -608,6 +632,9 @@ export function RumahGadangAnimatedScene({
         <div className="h-full w-1/3 bg-[#8B1A24]" />
         <div className="h-full w-1/3 bg-[#E5C158]" />
       </motion.div>
+
+      {/* Fluttering Crimson-Gold Butterflies (MP4 #3 Art Motion Minang) */}
+      <FlutteringButterflies theme={theme} />
 
       {/* Falling Bunga Rampai & Golden Songket Shimmer Particles */}
       {showPetals ? (

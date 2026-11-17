@@ -29,6 +29,10 @@ import {
   PucuakRabuangDividerSVG,
   SongketPatternOverlay,
 } from "@/components/ornaments/MinangOrnaments";
+import {
+  ForegroundRumahGadangOverlay,
+  HangingMinangValance,
+} from "@/components/ornaments/Minang3DElements";
 import { RumahGadangAnimatedScene } from "@/components/ornaments/RumahGadangAnimatedScene";
 import { CoverGate } from "./CoverGate";
 import { InvitationSections, StudioTabKey } from "./InvitationSections";
@@ -432,10 +436,10 @@ export function InvitationView({
         <main
           className={`relative mx-auto w-full ${
             forceMobileLayout ? "max-w-[440px]" : "lg:w-[500px] lg:shrink-0"
-          } min-h-screen px-4 py-6 sm:px-5`}
+          } min-h-screen px-3.5 pb-0 pt-0 sm:px-5`}
         >
           {/* Background Iconic Rumah Gadang & Songket Texture for Column */}
-          <div className="pointer-events-none fixed inset-0 overflow-hidden opacity-45 lg:hidden">
+          <div className="pointer-events-none fixed inset-0 overflow-hidden opacity-60 lg:hidden">
             <RumahGadangAnimatedScene theme={theme} showPetals />
           </div>
           <div className="pointer-events-none absolute inset-0 overflow-hidden">
@@ -443,6 +447,11 @@ export function InvitationView({
               color={theme.songketStroke}
               opacity={theme.songketOpacity}
             />
+          </div>
+
+          {/* Sticky Top Songket Pucuak Rabuang Valance & Swaying Gold Minang Pendants (MP4 #2/#3) */}
+          <div className="pointer-events-none sticky top-0 z-30 -mx-3.5 -mb-7 sm:-mx-5">
+            <HangingMinangValance theme={theme} />
           </div>
 
           {/* Theme Switcher ONLY inside Studio Embedded Preview (Never shown on Guest Invitation) */}
@@ -509,7 +518,7 @@ export function InvitationView({
           ) : null}
 
           {/* All Invitation Sections */}
-          <div className="relative z-10">
+          <div className="relative z-10 pt-4">
             <InvitationSections
               config={activeConfig}
               theme={theme}
@@ -520,6 +529,11 @@ export function InvitationView({
               onEditSection={onEditSection}
               showEditBadges={showEditBadges}
             />
+          </div>
+
+          {/* Sticky Foreground 5-Gonjong Rumah Gadang & Roses Layer for True 3D Depth (MP4 #1/#2/#3) */}
+          <div className="pointer-events-none sticky bottom-0 z-30 -mx-3.5 -mt-24 h-24 sm:-mx-5">
+            <ForegroundRumahGadangOverlay theme={theme} className="h-full w-full" />
           </div>
 
           {/* Floating Music Toggle (Urang Minang Baralek Gadang) + Quick Navigation Dock */}
